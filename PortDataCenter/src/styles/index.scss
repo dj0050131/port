@@ -1,0 +1,98 @@
+@use './theme.scss';
+
+/* Reset & Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Global enforcement */
+}
+
+/* Exceptions for Avatars - enforcing via specific classes */
+.el-avatar,
+.user-avatar,
+.rounded-circle,
+.el-avatar * {
+  border-radius: 50% !important;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background-color: var(--tidal-bg-body);
+  color: var(--tidal-text-main);
+}
+
+/* Layout Utilities */
+.full-screen-gradient {
+  min-height: 100vh;
+  background: var(--tidal-bg-body);
+}
+
+.glass-card {
+  /* Replacing glassmorphism with clean flat design for Tidal Theme */
+  background: var(--tidal-bg-card);
+  border: 1px solid var(--tidal-border);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+}
+
+.page-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+  overflow: auto;
+}
+
+.panel {
+  padding: 20px;
+  background: var(--tidal-bg-card);
+  border: 1px solid var(--tidal-border);
+}
+
+.panel-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--tidal-text-main);
+  border-left: 4px solid var(--tidal-primary);
+  padding-left: 12px;
+  line-height: 1;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 2px 8px;
+  font-size: 12px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+  border: 1px solid var(--el-color-primary-light-5);
+}
+
+.digital-number {
+  font-family: 'Segoe UI', sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Transitions */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Pilots">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="pilotCode" column="pilot_code" jdbcType="VARCHAR"/>
+            <result property="pilotName" column="pilot_name" jdbcType="VARCHAR"/>
+            <result property="pilotLevel" column="pilot_level" jdbcType="VARCHAR"/>
+            <result property="careerStartDate" column="career_start_date" jdbcType="DATE"/>
+            <result property="otherExperience" column="other_experience" jdbcType="VARCHAR"/>
+            <result property="healthStatus" column="health_status" jdbcType="VARCHAR"/>
+            <result property="accidentRecord" column="accident_record" jdbcType="VARCHAR"/>
+            <result property="totalCargoTonnage" column="total_cargo_tonnage" jdbcType="DECIMAL"/>
+            <result property="totalOperations" column="total_operations" jdbcType="INTEGER"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="simCard" column="sim_card" jdbcType="VARCHAR"/>
+            <result property="dataSimCard" column="data_sim_card" jdbcType="VARCHAR"/>
+            <result property="wirelessIp" column="wireless_ip" jdbcType="VARCHAR"/>
+            <result property="shortNumber" column="short_number" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="onDutyStatus" column="on_duty_status" jdbcType="OTHER"/>
+            <result property="emergencyContact" column="emergency_contact" jdbcType="VARCHAR"/>
+            <result property="emergencyPhone" column="emergency_phone" jdbcType="VARCHAR"/>
+            <result property="certificateNo" column="certificate_no" jdbcType="VARCHAR"/>
+            <result property="certificateExpiry" column="certificate_expiry" jdbcType="DATE"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,pilot_code,pilot_name,
+        pilot_level,career_start_date,other_experience,
+        health_status,accident_record,total_cargo_tonnage,
+        total_operations,phone,sim_card,
+        data_sim_card,wireless_ip,short_number,
+        email,on_duty_status,emergency_contact,
+        emergency_phone,certificate_no,certificate_expiry,
+        user_id,created_at,updated_at
+    </sql>
+</mapper>

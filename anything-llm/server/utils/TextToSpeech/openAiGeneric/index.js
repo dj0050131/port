@@ -1,0 +1,53 @@
+class GenericOpenAiTTS {
+  constructor() {
+    if (!process.env.TTS_OPEN_AI_COMPATIBLE_KEY)
+      this.#log(
+        "No OpenAI compatible API key was set. You might need to set this to use your OpenAI compatible TTS service."
+      );
+    if (!process.env.TTS_OPEN_AI_COMPATIBLE_MODEL)
+      this.#log(
+        "No OpenAI compatible TTS model was set. We will use the default voice model 'tts-1'. This may not exist or be valid your selected endpoint."
+      );
+    if (!process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL)
+      this.#log(
+        "No OpenAI compatible voice model was set. We will use the default voice model 'alloy'. This may not exist for your selected endpoint."
+      );
+    if (!process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT)
+      throw new Error(
+        "No OpenAI compatible endpoint was set. Please set this to use your OpenAI compatible TTS service."
+      );
+
+    const { OpenAI: OpenAIApi } = require("openai");
+    this.openai = new OpenAIApi({
+      apiKey: process.env.TTS_OPEN_AI_COMPATIBLE_KEY || null,
+      baseURL: process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT,
+    });
+    this.model = process.env.TTS_OPEN_AI_COMPATIBLE_MODEL ?? "tts-1";
+    this.voice = process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL ?? "alloy";
+    this.#log(
+      `Service (${process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT}) with model: ${this.model} and voice: ${this.voice}`
+    );
+  }
+
+  #log(text, ...args) {
+  }
+
+  
+  async ttsBuffer(textInput) {
+    try {
+      const result = await this.openai.audio.speech.create({
+        model: this.model,
+        voice: this.voice,
+        input: textInput,
+      });
+      return Buffer.from(await result.arrayBuffer());
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
+  }
+}
+
+module.exports = {
+  GenericOpenAiTTS,
+};

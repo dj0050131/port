@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.TaxItemDetailsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.TaxItemDetails">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taxRecordId" column="tax_record_id" jdbcType="BIGINT"/>
+            <result property="taxItemCode" column="tax_item_code" jdbcType="VARCHAR"/>
+            <result property="taxItemName" column="tax_item_name" jdbcType="VARCHAR"/>
+            <result property="taxType" column="tax_type" jdbcType="OTHER"/>
+            <result property="taxRate" column="tax_rate" jdbcType="DECIMAL"/>
+            <result property="taxableBase" column="taxable_base" jdbcType="DECIMAL"/>
+            <result property="taxAmount" column="tax_amount" jdbcType="DECIMAL"/>
+            <result property="taxPolicyReference" column="tax_policy_reference" jdbcType="VARCHAR"/>
+            <result property="isPreferential" column="is_preferential" jdbcType="TINYINT"/>
+            <result property="preferentialRate" column="preferential_rate" jdbcType="DECIMAL"/>
+            <result property="preferentialAmount" column="preferential_amount" jdbcType="DECIMAL"/>
+            <result property="preferentialPolicy" column="preferential_policy" jdbcType="VARCHAR"/>
+            <result property="isAdjusted" column="is_adjusted" jdbcType="TINYINT"/>
+            <result property="adjustmentReason" column="adjustment_reason" jdbcType="VARCHAR"/>
+            <result property="previousTaxAmount" column="previous_tax_amount" jdbcType="DECIMAL"/>
+            <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tax_record_id,tax_item_code,tax_item_name,tax_type,tax_rate,
+        taxable_base,tax_amount,tax_policy_reference,is_preferential,preferential_rate,
+        preferential_amount,preferential_policy,is_adjusted,adjustment_reason,previous_tax_amount,
+        sort_order,notes,created_at,updated_at
+    </sql>
+</mapper>

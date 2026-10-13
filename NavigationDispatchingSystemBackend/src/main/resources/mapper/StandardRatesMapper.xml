@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.StandardRatesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.StandardRates">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="rateCode" column="rate_code" jdbcType="VARCHAR"/>
+            <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+            <result property="typeId" column="type_id" jdbcType="VARCHAR"/>
+            <result property="effectiveDate" column="effective_date" jdbcType="DATE"/>
+            <result property="expiryDate" column="expiry_date" jdbcType="DATE"/>
+            <result property="routeId" column="route_id" jdbcType="BIGINT"/>
+            <result property="nauticalMiles" column="nautical_miles" jdbcType="DECIMAL"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="applicableVesselMinNetTon" column="applicable_vessel_min_net_ton" jdbcType="DECIMAL"/>
+            <result property="applicableVesselMaxNetTon" column="applicable_vessel_max_net_ton" jdbcType="DECIMAL"/>
+            <result property="rateStatus" column="rate_status" jdbcType="OTHER"/>
+            <result property="currencyUnit" column="currency_unit" jdbcType="VARCHAR"/>
+            <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
+            <result property="updatedBy" column="updated_by" jdbcType="BIGINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="ruleCount" column="rule_count" jdbcType="INTEGER"/>
+            <result property="conditionCount" column="condition_count" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,rate_code,category_id,
+        type_id,effective_date,expiry_date,
+        route_id,nautical_miles,notes,
+        applicable_vessel_min_net_ton,
+        applicable_vessel_max_net_ton,rate_status,
+        currency_unit,created_by,updated_by,
+        created_at,updated_at,rule_count,condition_count
+    </sql>
+</mapper>

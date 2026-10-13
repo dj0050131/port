@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.VehiclesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Vehicles">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="vehicleCode" column="vehicle_code" jdbcType="VARCHAR"/>
+            <result property="licensePlate" column="license_plate" jdbcType="VARCHAR"/>
+            <result property="vehicleModel" column="vehicle_model" jdbcType="VARCHAR"/>
+            <result property="purchaseDate" column="purchase_date" jdbcType="DATE"/>
+            <result property="passengerCapacity" column="passenger_capacity" jdbcType="INTEGER"/>
+            <result property="mainPerformance" column="main_performance" jdbcType="VARCHAR"/>
+            <result property="totalKilometers" column="total_kilometers" jdbcType="DECIMAL"/>
+            <result property="vehicleStatus" column="vehicle_status" jdbcType="OTHER"/>
+            <result property="currentLocation" column="current_location" jdbcType="VARCHAR"/>
+            <result property="color" column="color" jdbcType="VARCHAR"/>
+            <result property="lastMaintenanceDate" column="last_maintenance_date" jdbcType="DATE"/>
+            <result property="maintenanceInterval" column="maintenance_interval" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,vehicle_code,license_plate,
+        vehicle_model,purchase_date,passenger_capacity,
+        main_performance,total_kilometers,vehicle_status,
+        current_location,color,last_maintenance_date,
+        maintenance_interval,created_at,updated_at
+    </sql>
+</mapper>

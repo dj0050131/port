@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotageCertificatesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PilotageCertificates">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="certificateCode" column="certificate_code" jdbcType="VARCHAR"/>
+            <result property="operationId" column="operation_id" jdbcType="VARCHAR"/>
+            <result property="vesselId" column="vessel_id" jdbcType="BIGINT"/>
+            <result property="voyageId" column="voyage_id" jdbcType="BIGINT"/>
+            <result property="inboundAgentId" column="inbound_agent_id" jdbcType="BIGINT"/>
+            <result property="outboundAgentId" column="outbound_agent_id" jdbcType="BIGINT"/>
+            <result property="startLocationId" column="start_location_id" jdbcType="BIGINT"/>
+            <result property="endLocationId" column="end_location_id" jdbcType="BIGINT"/>
+            <result property="startLocationType" column="start_location_type" jdbcType="VARCHAR"/>
+            <result property="startLocationName" column="start_location_name" jdbcType="VARCHAR"/>
+            <result property="endLocationType" column="end_location_type" jdbcType="VARCHAR"/>
+            <result property="endLocationName" column="end_location_name" jdbcType="VARCHAR"/>
+            <result property="tradeType" column="trade_type" jdbcType="VARCHAR"/>
+            <result property="vesselNameZh" column="vessel_name_zh" jdbcType="VARCHAR"/>
+            <result property="escortFlag" column="escort_flag" jdbcType="VARCHAR"/>
+            <result property="enteredBy" column="entered_by" jdbcType="VARCHAR"/>
+            <result property="handoverSheetId" column="handover_sheet_id" jdbcType="VARCHAR"/>
+            <result property="routeCode" column="route_code" jdbcType="VARCHAR"/>
+            <result property="routeName" column="route_name" jdbcType="VARCHAR"/>
+            <result property="inboundVoyage" column="inbound_voyage" jdbcType="VARCHAR"/>
+            <result property="outboundVoyage" column="outbound_voyage" jdbcType="VARCHAR"/>
+            <result property="berthingAssistanceFlag" column="berthing_assistance_flag" jdbcType="VARCHAR"/>
+            <result property="berthingAssistanceCharge" column="berthing_assistance_charge" jdbcType="DECIMAL"/>
+            <result property="vesselNameEn" column="vessel_name_en" jdbcType="VARCHAR"/>
+            <result property="withdrawalFlag" column="withdrawal_flag" jdbcType="VARCHAR"/>
+            <result property="pilotageType" column="pilotage_type" jdbcType="VARCHAR"/>
+            <result property="forwardDraft" column="forward_draft" jdbcType="DECIMAL"/>
+            <result property="aftDraft" column="aft_draft" jdbcType="DECIMAL"/>
+            <result property="horsepower" column="horsepower" jdbcType="DECIMAL"/>
+            <result property="detentionFlag" column="detention_flag" jdbcType="VARCHAR"/>
+            <result property="detentionHours" column="detention_hours" jdbcType="DECIMAL"/>
+            <result property="detentionPersons" column="detention_persons" jdbcType="INTEGER"/>
+            <result property="pilotageStartTime" column="pilotage_start_time" jdbcType="TIMESTAMP"/>
+            <result property="pilotageEndTime" column="pilotage_end_time" jdbcType="TIMESTAMP"/>
+            <result property="totalPassengers" column="total_passengers" jdbcType="INTEGER"/>
+            <result property="totalCrew" column="total_crew" jdbcType="INTEGER"/>
+            <result property="statusCode" column="status_code" jdbcType="VARCHAR"/>
+            <result property="statusName" column="status_name" jdbcType="VARCHAR"/>
+            <result property="boardingTime" column="boarding_time" jdbcType="TIMESTAMP"/>
+            <result property="leavingTime" column="leaving_time" jdbcType="TIMESTAMP"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="submitStatus" column="submit_status" jdbcType="OTHER"/>
+            <result property="submittedAt" column="submitted_at" jdbcType="TIMESTAMP"/>
+            <result property="confirmedBy" column="confirmed_by" jdbcType="BIGINT"/>
+            <result property="confirmedAt" column="confirmed_at" jdbcType="TIMESTAMP"/>
+            <result property="billingStatus" column="billing_status" jdbcType="OTHER"/>
+            <result property="specialSituationDescription" column="special_situation_description" jdbcType="VARCHAR"/>
+            <result property="pilotSignTime" column="pilot_sign_time" jdbcType="TIMESTAMP"/>
+            <result property="agentConfirmTime" column="agent_confirm_time" jdbcType="TIMESTAMP"/>
+            <result property="planId" column="plan_id" jdbcType="BIGINT"/>
+            <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
+            <result property="updatedBy" column="updated_by" jdbcType="BIGINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,certificate_code,operation_id,
+        vessel_id,voyage_id,inbound_agent_id,
+        outbound_agent_id,start_location_id,end_location_id,
+        start_location_type,start_location_name,end_location_type,
+        end_location_name,trade_type,vessel_name_zh,escort_flag,
+        entered_by,handover_sheet_id,route_code,
+        route_name,inbound_voyage,outbound_voyage,
+        berthing_assistance_flag,berthing_assistance_charge,vessel_name_en,
+        withdrawal_flag,pilotage_type,forward_draft,
+        aft_draft,horsepower,detention_flag,
+        detention_hours,detention_persons,pilotage_start_time,
+        pilotage_end_time,total_passengers,total_crew,
+        status_code,status_name,boarding_time,
+        leaving_time,notes,submit_status,
+        submitted_at,confirmed_by,confirmed_at,
+        billing_status,special_situation_description,pilot_sign_time,
+        plan_id,
+        agent_confirm_time,created_by,updated_by,
+        created_at,updated_at
+    </sql>
+    <select id="selectCertificatePage" resultType="syy.portPilotage.dto.certificate.CertificateDetailDTO">
+        SELECT
+        pc.*,
+        v.name_zh AS vessel_name_zh,
+        v.name_en AS vessel_name_en,
+        v.imo_number AS imo_number,
+        v.vessel_call_sign AS vessel_call_sign,
+        v.vessel_length AS vessel_length,
+        v.vessel_width AS vessel_width,
+        v.gross_tonnage AS gross_tonnage,
+        v.net_tonnage AS net_tonnage,
+        voy.voyage_number AS voyage_number,
+        voy.voyage_type AS voyage_type,
+        voy.cargo_name AS cargo_name,
+        voy.cargo_quantity AS cargo_quantity,
+        ia.company_name AS inbound_agent_name,
+        oa.company_name AS outbound_agent_name,
+        -- 起始位置名称（根据类型动态获取）
+        CASE
+        WHEN pc.start_location_type = 'BERTH' THEN (SELECT berth_name FROM berths WHERE id = pc.start_location_id)
+        WHEN pc.start_location_type = 'ANCHORAGE' THEN (SELECT anchorage_name_zh FROM anchorages WHERE id = pc.start_location_id)
+        WHEN pc.start_location_type = 'WHARF' THEN (SELECT wharf_name_zh FROM wharves WHERE id = pc.start_location_id)
+        WHEN pc.start_location_type = 'PORT_AREA' THEN (SELECT area_name_zh FROM port_areas WHERE id = pc.start_location_id)
+        ELSE pc.start_location_name
+        END AS start_location_full_name,
+        -- 结束位置名称（根据类型动态获取）
+        CASE
+        WHEN pc.end_location_type = 'BERTH' THEN (SELECT berth_name FROM berths WHERE id = pc.end_location_id)
+        WHEN pc.end_location_type = 'ANCHORAGE' THEN (SELECT anchorage_name_zh FROM anchorages WHERE id = pc.end_location_id)
+        WHEN pc.end_location_type = 'WHARF' THEN (SELECT wharf_name_zh FROM wharves WHERE id = pc.end_location_id)
+        WHEN pc.end_location_type = 'PORT_AREA' THEN (SELECT area_name_zh FROM port_areas WHERE id = pc.end_location_id)
+        ELSE pc.end_location_name
+        END AS end_location_full_name,
+        pp.assigned_pilot_id AS assigned_pilot_id,
+        p.pilot_name AS assigned_pilot_name,
+        -- 关联最新的计费凭证
+        (SELECT id 
+         FROM billing_vouchers bv 
+         WHERE bv.certificate_id = pc.id 
+         ORDER BY bv.created_at DESC 
+         LIMIT 1) AS latest_billing_voucher_id
+        FROM pilotage_certificates pc
+        LEFT JOIN vessels v ON pc.vessel_id = v.id
+        LEFT JOIN voyages voy ON pc.voyage_id = voy.id
+        LEFT JOIN agents ia ON pc.inbound_agent_id = ia.id
+        LEFT JOIN agents oa ON pc.outbound_agent_id = oa.id
+        LEFT JOIN pilotage_plans pp ON pc.plan_id = pp.id
+        LEFT JOIN pilots p ON pp.assigned_pilot_id = p.id
+        WHERE 1=1
+        <if test="params.vesselNameZh != null and params.vesselNameZh != ''">
+            AND v.name_zh LIKE CONCAT('%', #{params.vesselNameZh}, '%')
+        </if>
+        <if test="params.vesselNameEn != null and params.vesselNameEn != ''">
+            AND v.name_en LIKE CONCAT('%', #{params.vesselNameEn}, '%')
+        </if>
+        <if test="params.vesselCallSign != null and params.vesselCallSign != ''">
+            AND v.vessel_call_sign LIKE CONCAT('%', #{params.vesselCallSign}, '%')
+        </if>
+        <if test="params.imoNumber != null and params.imoNumber != ''">
+            AND v.imo_number LIKE CONCAT('%', #{params.imoNumber}, '%')
+        </if>
+        <if test="params.submitStatus != null and params.submitStatus != ''">
+            AND pc.submit_status = #{params.submitStatus}
+        </if>
+        <if test="params.billingStatus != null and params.billingStatus != ''">
+            AND pc.billing_status = #{params.billingStatus}
+        </if>
+        <if test="params.pilotId != null">
+            AND pp.assigned_pilot_id = #{params.pilotId}
+        </if>
+        <if test="params.agentId != null">
+            AND (pc.inbound_agent_id = #{params.agentId} OR pc.outbound_agent_id = #{params.agentId})
+        </if>
+        <if test="params.certificateCode != null and params.certificateCode != ''">
+            AND pc.certificate_code LIKE CONCAT('%', #{params.certificateCode}, '%')
+        </if>
+        <if test="params.voyageNumber != null and params.voyageNumber != ''">
+            AND voy.voyage_number LIKE CONCAT('%', #{params.voyageNumber}, '%')
+        </if>
+        <!-- 新增位置类型过滤条件 -->
+        <if test="params.startLocationType != null and params.startLocationType != ''">
+            AND pc.start_location_type = #{params.startLocationType}
+        </if>
+        <if test="params.endLocationType != null and params.endLocationType != ''">
+            AND pc.end_location_type = #{params.endLocationType}
+        </if>
+        <!-- 新增位置名称过滤条件 -->
+        <if test="params.startLocationName != null and params.startLocationName != ''">
+            AND pc.start_location_name LIKE CONCAT('%', #{params.startLocationName}, '%')
+        </if>
+        <if test="params.endLocationName != null and params.endLocationName != ''">
+            AND pc.end_location_name LIKE CONCAT('%', #{params.endLocationName}, '%')
+        </if>
+        <if test="params.startDate != null">
+            AND DATE(pc.created_at) >= DATE(#{params.startDate})
+        </if>
+        <if test="params.endDate != null">
+            AND DATE(pc.created_at) &lt;= DATE(#{params.endDate})
+        </if>
+        ORDER BY pc.created_at DESC
+    </select>
+</mapper>

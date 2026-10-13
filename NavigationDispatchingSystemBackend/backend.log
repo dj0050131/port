@@ -1,0 +1,102 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.7)
+
+2026-06-20T11:53:36.160+08:00  INFO 49860 --- [port-pilotage-backend] [           main] s.portPilotage.PortPilotageApplication   : Starting PortPilotageApplication v1.0.0 using Java 17.0.15 with PID 49860 (D:\000000000halt\111\bishe\NavigationDispatchingSystemBackend\target\port-pilotage-backend-1.0.0-exec.jar started by 20575 in D:\000000000halt\111\bishe\NavigationDispatchingSystemBackend)
+2026-06-20T11:53:36.164+08:00  INFO 49860 --- [port-pilotage-backend] [           main] s.portPilotage.PortPilotageApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-06-20T11:53:37.967+08:00  INFO 49860 --- [port-pilotage-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-06-20T11:53:37.976+08:00  INFO 49860 --- [port-pilotage-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-06-20T11:53:38.022+08:00  INFO 49860 --- [port-pilotage-backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 26 ms. Found 0 Redis repository interfaces.
+2026-06-20T11:53:39.789+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8099 (http)
+2026-06-20T11:53:39.815+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-06-20T11:53:39.817+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.48]
+2026-06-20T11:53:39.904+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-06-20T11:53:39.907+08:00  INFO 49860 --- [port-pilotage-backend] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3685 ms
+2026-06-20T11:53:40.073+08:00  INFO 49860 --- [port-pilotage-backend] [           main] s.p.s.f.JwtAuthenticationTokenFilter     : JwtAuthenticationTokenFilter 被创建
+2026-06-20T11:53:40.575+08:00  INFO 49860 --- [port-pilotage-backend] [           main] c.g.y.a.MybatisPlusJoinAutoConfiguration : MPJSqlInjector init
+2026-06-20T11:53:41.425+08:00  WARN 49860 --- [port-pilotage-backend] [           main] c.b.m.core.injector.methods.Insert       : [syy.portPilotage.mapper.BillingVouchersMapper.insert] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.Insert]
+ _ _   |_  _ _|_. ___ _ |    _ 
+| | |\/|_)(_| | |_\  |_)||_|_\ 
+     /               |         
+                        3.5.5 
+=== 检查配置类加载 ===
+??? SecurityConfig 构造函数被调用 ???
+??? SecurityConfig @PostConstruct 初始化完成 ???
+2026-06-20T11:53:48.454+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-06-20T11:53:48.544+08:00  INFO 49860 --- [port-pilotage-backend] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+ _ _   |_  _ _|_. ___ _ |    _  .  _  .  _  
+| | |\/|_)(_| | |_\  |_)||_|_\  | (_) | | | 
+     /               |          /
+                                    1.4.5
+2026-06-20T11:53:49.816+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8099 (http) with context path '/'
+2026-06-20T11:53:49.824+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.s.a.r.c.CachingConnectionFactory       : Attempting to connect to: [localhost:5672]
+2026-06-20T11:53:49.932+08:00  INFO 49860 --- [port-pilotage-backend] [           main] o.s.a.r.c.CachingConnectionFactory       : Created new connection: rabbitConnectionFactory#1a6df932:0/SimpleConnection@4f9e32f2 [delegate=amqp://guest@127.0.0.1:5672/, localPort=50391]
+2026-06-20T11:53:50.086+08:00  INFO 49860 --- [port-pilotage-backend] [           main] s.portPilotage.PortPilotageApplication   : Started PortPilotageApplication in 14.523 seconds (process running for 15.047)
+========================================
+港口引航及计费系统启动成功!
+服务端口: 8099
+API文档地址: http://localhost:8099/swagger-ui.html
+API文档地址(备用): http://localhost:8099/swagger-ui/index.html
+OpenAPI JSON: http://localhost:8099/v3/api-docs
+========================================
+2026-06-20T11:53:52.333+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 开始清理过期的用户在线状态
+2026-06-20T11:53:52.338+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 清理完成，共清理 0 个过期的在线状态记录
+2026-06-20T11:54:07.284+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-06-20T11:54:07.285+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-06-20T11:54:07.287+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+=== 请求进入: POST /api/auth/login ===
+2026-06-20T11:54:07.459+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/login, Method=POST, User=匿名, Params=[{"account":"admin","password":"123456","captcha":null,"captchaKey":null}]
+2026-06-20T11:54:07.460+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] s.p.controller.auth.AuthController       : 用户登录: admin
+2026-06-20T11:54:07.537+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-06-20T11:54:07.697+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@48a1aee
+2026-06-20T11:54:07.699+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-06-20T11:54:07.847+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] s.p.redis.service.UserAuthService        : 存储用户Token: account=admin, token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6IkFETUlOIiwidXNlcklkIjoxLCJhY2NvdW50IjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3ODE5Mjc2NDcsImV4cCI6MTc4MTk0MjA0N30.v5ybpqxmX1FqvLhSi_qgspW8Mmqx3KNhSfppmyjoAi4
+2026-06-20T11:54:07.849+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] s.p.redis.cache.UserOnlineStatusService  : 设置用户在线状态: userId=1
+2026-06-20T11:54:07.854+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] s.p.controller.auth.AuthController       : 用户登录成功: admin
+2026-06-20T11:54:07.855+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-1] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=418ms
+=== 请求完成: POST /api/auth/login ===
+2026-06-20T12:00:00.019+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.WeatherSyncTask    : 开始执行气象数据同步任务
+2026-06-20T12:00:00.019+08:00  WARN 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.WeatherSyncTask    : 未配置 weather.fetch.url，跳过气象数据同步
+2026-06-20T12:00:00.020+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.WeatherSyncTask    : 气象数据同步任务执行成功
+2026-06-20T12:00:00.020+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.WeatherSyncTask    : 潮汐数据同步完成
+2026-06-20T12:00:00.020+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.WeatherSyncTask    : 潮汐数据同步任务执行成功
+2026-06-20T12:00:00.021+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.CacheRefreshTask   : 开始执行缓存刷新任务
+2026-06-20T12:00:00.021+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] syy.portPilotage.task.CacheRefreshTask   : 缓存刷新任务执行成功
+2026-06-20T12:03:51.308+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 开始清理过期的用户在线状态
+2026-06-20T12:03:51.310+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 清理完成，共清理 0 个过期的在线状态记录
+2026-06-20T12:13:51.314+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 开始清理过期的用户在线状态
+2026-06-20T12:13:51.317+08:00  INFO 49860 --- [port-pilotage-backend] [   scheduling-1] s.p.task.UserOnlineStatusTask            : 清理完成，共清理 0 个过期的在线状态记录
+=== 请求进入: POST /api/auth/login ===
+2026-06-20T12:16:52.844+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/login, Method=POST, User=匿名, Params=[{"account":"admin","password":"123456","captcha":null,"captchaKey":null}]
+2026-06-20T12:16:52.846+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] s.p.controller.auth.AuthController       : 用户登录: admin
+2026-06-20T12:16:52.934+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] s.p.redis.service.UserAuthService        : 存储用户Token: account=admin, token=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6IkFETUlOIiwidXNlcklkIjoxLCJhY2NvdW50IjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3ODE5MjkwMTIsImV4cCI6MTc4MTk0MzQxMn0.v6blnQGCfEvIGSYeGc_-eavmIP1Bz7WqW3-FkCGMPtY
+2026-06-20T12:16:52.936+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] s.p.redis.cache.UserOnlineStatusService  : 设置用户在线状态: userId=1
+2026-06-20T12:16:52.937+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] s.p.controller.auth.AuthController       : 用户登录成功: admin
+2026-06-20T12:16:52.937+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-3] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=93ms
+=== 请求完成: POST /api/auth/login ===
+=== 请求进入: GET /api/auth/current ===
+2026-06-20T12:16:56.671+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-4] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/current, Method=GET, User=admin, Params=
+2026-06-20T12:16:56.681+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-4] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=10ms
+=== 请求完成: GET /api/auth/current ===
+=== 请求进入: GET /api/auth/current ===
+2026-06-20T12:17:01.129+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-5] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/current, Method=GET, User=admin, Params=
+2026-06-20T12:17:01.132+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-5] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=3ms
+=== 请求完成: GET /api/auth/current ===
+=== 请求进入: GET /api/auth/current ===
+2026-06-20T12:17:02.026+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-6] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/current, Method=GET, User=admin, Params=
+2026-06-20T12:17:02.030+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-6] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=4ms
+=== 请求完成: GET /api/auth/current ===
+=== 请求进入: GET /api/auth/current ===
+2026-06-20T12:17:02.574+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-7] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/current, Method=GET, User=admin, Params=
+2026-06-20T12:17:02.578+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-7] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=3ms
+=== 请求完成: GET /api/auth/current ===
+=== 请求进入: GET /api/auth/current ===
+2026-06-20T12:17:03.348+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-8] syy.portPilotage.aop.LogAspect           : ==> 请求开始: URI=/api/auth/current, Method=GET, User=admin, Params=
+2026-06-20T12:17:03.352+08:00  INFO 49860 --- [port-pilotage-backend] [0.0-8099-exec-8] syy.portPilotage.aop.LogAspect           : <== 请求结束: Cost=4ms
+=== 请求完成: GET /api/auth/current ===

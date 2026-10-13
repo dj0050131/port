@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.WorkSheetRecordsMapper">
+
+    <select id="selectPilotPage" resultType="syy.portPilotage.vo.pilotage.WorkSheetPilotRecordVO">
+        SELECT
+            p.id AS planId,
+            p.plan_code AS planCode,
+            v.name_zh AS shipName,
+            v.name_en AS englishName,
+            pl.pilot_name AS pilotName,
+            DATE_FORMAT(COALESCE(p.actual_start_time, p.plan_start_time), '%Y-%m-%d %H:%i') AS time,
+            COALESCE(p.end_location_name, p.start_location_name) AS berth,
+            CASE
+                WHEN p.operation_type_flag LIKE '%进%' THEN '进港'
+                WHEN p.operation_type_flag LIKE '%出%' THEN '出港'
+                WHEN p.operation_type_flag LIKE '%移%' THEN '移泊'
+                ELSE COALESCE(p.operation_type_flag, '-')
+            END AS dynamic,
+            FORMAT(v.gross_tonnage, 2) AS grossTonnage,
+            FORMAT(v.net_tonnage, 2) AS netTonnage,
+            FORMAT(v.deadweight, 2) AS deadWeight,
+            FORMAT(v.vessel_length, 2) AS length,
+            FORMAT(v.vessel_width, 2) AS width,
+            FORMAT(v.full_load_draft, 2) AS draft,
+            v.nationality AS nationality,
+            v.vessel_call_sign AS callSign,
+            v.imo_number AS imoNumber
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN pilots pl ON pl.id = p.assigned_pilot_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR pl.pilot_name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+        ORDER BY COALESCE(p.actual_start_time, p.plan_start_time) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countPilotPage" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN pilots pl ON pl.id = p.assigned_pilot_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR pl.pilot_name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="selectDriverPage" resultType="syy.portPilotage.vo.pilotage.WorkSheetDriverRecordVO">
+        SELECT
+            p.id AS planId,
+            p.plan_code AS planCode,
+            v.name_zh AS shipName,
+            v.name_en AS englishName,
+            d.name AS driverName,
+            ve.license_plate AS licensePlate,
+            DATE_FORMAT(COALESCE(p.actual_start_time, p.plan_start_time), '%Y-%m-%d %H:%i') AS time,
+            COALESCE(p.end_location_name, p.start_location_name) AS berth,
+            CASE
+                WHEN p.operation_type_flag LIKE '%进%' THEN '进港'
+                WHEN p.operation_type_flag LIKE '%出%' THEN '出港'
+                WHEN p.operation_type_flag LIKE '%移%' THEN '移泊'
+                ELSE COALESCE(p.operation_type_flag, '-')
+            END AS dynamic,
+            FORMAT(v.gross_tonnage, 2) AS grossTonnage,
+            FORMAT(v.net_tonnage, 2) AS netTonnage,
+            FORMAT(v.deadweight, 2) AS deadWeight,
+            FORMAT(v.vessel_length, 2) AS length,
+            FORMAT(v.vessel_width, 2) AS width,
+            FORMAT(v.full_load_draft, 2) AS draft,
+            v.nationality AS nationality,
+            v.vessel_call_sign AS callSign,
+            v.imo_number AS imoNumber
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN drivers d ON d.id = p.assigned_driver_id
+        LEFT JOIN vehicles ve ON ve.id = p.assigned_vehicle_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR d.name LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.license_plate LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+        ORDER BY COALESCE(p.actual_start_time, p.plan_start_time) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countDriverPage" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN drivers d ON d.id = p.assigned_driver_id
+        LEFT JOIN vehicles ve ON ve.id = p.assigned_vehicle_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR d.name LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.license_plate LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="selectVehiclePage" resultType="syy.portPilotage.vo.pilotage.WorkSheetVehicleRecordVO">
+        SELECT
+            p.id AS planId,
+            p.plan_code AS planCode,
+            v.name_zh AS shipName,
+            v.name_en AS englishName,
+            ve.vehicle_code AS vehicleCode,
+            ve.license_plate AS licensePlate,
+            d.name AS driverName,
+            DATE_FORMAT(COALESCE(p.actual_start_time, p.plan_start_time), '%Y-%m-%d %H:%i') AS time,
+            COALESCE(p.end_location_name, p.start_location_name) AS berth,
+            CASE
+                WHEN p.operation_type_flag LIKE '%进%' THEN '进港'
+                WHEN p.operation_type_flag LIKE '%出%' THEN '出港'
+                WHEN p.operation_type_flag LIKE '%移%' THEN '移泊'
+                ELSE COALESCE(p.operation_type_flag, '-')
+            END AS dynamic
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN vehicles ve ON ve.id = p.assigned_vehicle_id
+        LEFT JOIN drivers d ON d.id = p.assigned_driver_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.license_plate LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.vehicle_code LIKE CONCAT('%', #{keyword}, '%')
+                OR d.name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+        ORDER BY COALESCE(p.actual_start_time, p.plan_start_time) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countVehiclePage" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM pilotage_plans p
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        LEFT JOIN vehicles ve ON ve.id = p.assigned_vehicle_id
+        LEFT JOIN drivers d ON d.id = p.assigned_driver_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.license_plate LIKE CONCAT('%', #{keyword}, '%')
+                OR ve.vehicle_code LIKE CONCAT('%', #{keyword}, '%')
+                OR d.name LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="selectTugboatPage" resultType="syy.portPilotage.vo.pilotage.WorkSheetTugboatRecordVO">
+        SELECT
+            p.id AS planId,
+            p.plan_code AS planCode,
+            v.name_zh AS shipName,
+            v.name_en AS englishName,
+            t.tugboat_name AS tugboatName,
+            t.call_sign AS tugboatCallSign,
+            FORMAT(t.bollard_pull, 2) AS bollardPull,
+            DATE_FORMAT(COALESCE(p.actual_start_time, p.plan_start_time), '%Y-%m-%d %H:%i') AS time,
+            COALESCE(p.end_location_name, p.start_location_name) AS berth,
+            CASE
+                WHEN p.operation_type_flag LIKE '%进%' THEN '进港'
+                WHEN p.operation_type_flag LIKE '%出%' THEN '出港'
+                WHEN p.operation_type_flag LIKE '%移%' THEN '移泊'
+                ELSE COALESCE(p.operation_type_flag, '-')
+            END AS dynamic
+        FROM plan_tugboat_assignments a
+        INNER JOIN pilotage_plans p ON p.id = a.plan_id
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        INNER JOIN tugboats t ON t.id = a.tugboat_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR t.tugboat_name LIKE CONCAT('%', #{keyword}, '%')
+                OR t.call_sign LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+        ORDER BY COALESCE(p.actual_start_time, p.plan_start_time) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countTugboatPage" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM plan_tugboat_assignments a
+        INNER JOIN pilotage_plans p ON p.id = a.plan_id
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        INNER JOIN tugboats t ON t.id = a.tugboat_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR t.tugboat_name LIKE CONCAT('%', #{keyword}, '%')
+                OR t.call_sign LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+    </select>
+
+    <select id="selectPilotBoatPage" resultType="syy.portPilotage.vo.pilotage.WorkSheetPilotBoatRecordVO">
+        SELECT
+            p.id AS planId,
+            p.plan_code AS planCode,
+            v.name_zh AS shipName,
+            v.name_en AS englishName,
+            b.boat_name AS boatName,
+            b.vessel_call_sign AS boatCallSign,
+            DATE_FORMAT(COALESCE(p.actual_start_time, p.plan_start_time), '%Y-%m-%d %H:%i') AS time,
+            COALESCE(p.end_location_name, p.start_location_name) AS berth,
+            CASE
+                WHEN p.operation_type_flag LIKE '%进%' THEN '进港'
+                WHEN p.operation_type_flag LIKE '%出%' THEN '出港'
+                WHEN p.operation_type_flag LIKE '%移%' THEN '移泊'
+                ELSE COALESCE(p.operation_type_flag, '-')
+            END AS dynamic
+        FROM plan_pilot_boat_assignments a
+        INNER JOIN pilotage_plans p ON p.id = a.plan_id
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        INNER JOIN pilot_boats b ON b.id = a.pilot_boat_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR b.boat_name LIKE CONCAT('%', #{keyword}, '%')
+                OR b.vessel_call_sign LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+        ORDER BY COALESCE(p.actual_start_time, p.plan_start_time) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="countPilotBoatPage" resultType="java.lang.Long">
+        SELECT COUNT(1)
+        FROM plan_pilot_boat_assignments a
+        INNER JOIN pilotage_plans p ON p.id = a.plan_id
+        INNER JOIN vessels v ON v.id = p.vessel_id
+        INNER JOIN pilot_boats b ON b.id = a.pilot_boat_id
+        WHERE p.plan_status IN ('ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="keyword != null and keyword != ''">
+            AND (
+                p.plan_code LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_zh LIKE CONCAT('%', #{keyword}, '%')
+                OR v.name_en LIKE CONCAT('%', #{keyword}, '%')
+                OR b.boat_name LIKE CONCAT('%', #{keyword}, '%')
+                OR b.vessel_call_sign LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+        <if test="startDate != null and startDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &gt;= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND COALESCE(p.actual_start_time, p.plan_start_time) &lt;= #{endDate}
+        </if>
+    </select>
+</mapper>
+
+

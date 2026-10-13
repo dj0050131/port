@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotageRoutesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PilotageRoutes">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="routeCode" column="route_code" jdbcType="VARCHAR"/>
+            <result property="routeType" column="route_type" jdbcType="VARCHAR"/>
+            <result property="routeName" column="route_name" jdbcType="VARCHAR"/>
+            <result property="routeNotes" column="route_notes" jdbcType="VARCHAR"/>
+            <result property="distanceNautical" column="distance_nautical" jdbcType="DECIMAL"/>
+            <result property="defaultDuration" column="default_duration" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="OTHER"/>
+            <result property="dangerLevel" column="danger_level" jdbcType="OTHER"/>
+            <result property="startLocationType" column="start_location_type" jdbcType="VARCHAR"/>
+            <result property="startLocationId" column="start_location_id" jdbcType="BIGINT"/>
+            <result property="startLocationName" column="start_location_name" jdbcType="VARCHAR"/>
+            <result property="endLocationType" column="end_location_type" jdbcType="VARCHAR"/>
+            <result property="endLocationId" column="end_location_id" jdbcType="BIGINT"/>
+            <result property="endLocationName" column="end_location_name" jdbcType="VARCHAR"/>
+            <result property="pilotageDirection" column="pilotage_direction" jdbcType="OTHER"/>
+            <result property="applicableVesselMinNetTon" column="applicable_vessel_min_net_ton" jdbcType="DECIMAL"/>
+            <result property="applicableVesselMaxNetTon" column="applicable_vessel_max_net_ton" jdbcType="DECIMAL"/>
+            <result property="daylightOnly" column="daylight_only" jdbcType="TINYINT"/>
+            <result property="tideDependent" column="tide_dependent" jdbcType="TINYINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,route_code,route_type,
+        route_name,route_notes,distance_nautical,
+        default_duration,status,danger_level,
+        start_location_type,start_location_id,start_location_name,
+        end_location_type,end_location_id,end_location_name,
+        pilotage_direction,applicable_vessel_min_net_ton,applicable_vessel_max_net_ton,
+        daylight_only,tide_dependent,created_at,
+        updated_at
+    </sql>
+</mapper>

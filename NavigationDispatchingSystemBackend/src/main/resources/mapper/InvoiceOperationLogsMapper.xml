@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.InvoiceOperationLogsMapper">
+  <resultMap id="BaseResultMap" type="syy.portPilotage.entity.InvoiceOperationLogs">
+    <!--@mbg.generated-->
+    <!--@Table port_pilotage.invoice_operation_logs-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="voucher_id" jdbcType="BIGINT" property="voucherId" />
+    <result column="operation_type" jdbcType="OTHER" property="operationType" />
+    <result column="operation_by" jdbcType="BIGINT" property="operationBy" />
+    <result column="operation_time" jdbcType="TIMESTAMP" property="operationTime" />
+    <result column="invoice_no" jdbcType="VARCHAR" property="invoiceNo" />
+    <result column="operation_details" jdbcType="VARCHAR" property="operationDetails" />
+    <result column="result" jdbcType="OTHER" property="result" />
+    <result column="error_message" jdbcType="LONGVARCHAR" property="errorMessage" />
+    <result column="notes" jdbcType="LONGVARCHAR" property="notes" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, voucher_id, operation_type, operation_by, operation_time, invoice_no, operation_details, 
+    `result`, error_message, notes, created_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from port_pilotage.invoice_operation_logs
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <!-- 付款提示提交外部系统异常：取每个 voucher 最新一条 PAYMENT_NOTICE 记录。
+       规则：审核通过 + 未付款 +（未提交(无日志) 或 最后一条结果为 FAIL） -->
+  <select id="selectPaymentNoticeFailed" resultType="map">
+    select
+      bv.id as voucherId,
+      l.operation_time as operationTime,
+      l.error_message as errorMessage,
+      l.operation_details as operationDetails
+    from port_pilotage.billing_vouchers bv
+      left join (
+        select voucher_id, max(id) as max_id
+        from port_pilotage.invoice_operation_logs
+        where operation_type = 'PAYMENT_NOTICE'
+        group by voucher_id
+      ) t on t.voucher_id = bv.id
+      left join port_pilotage.invoice_operation_logs l on l.id = t.max_id
+    where bv.audit_status = 'APPROVED'
+      and bv.payment_status = 'UNPAID'
+      and (t.max_id is null or l.result = 'FAIL')
+      <if test="keyword != null and keyword != ''">
+        and (bv.voucher_code like concat('%', #{keyword}, '%')
+          or bv.invoice_number like concat('%', #{keyword}, '%'))
+      </if>
+    order by l.operation_time desc
+    limit #{offset}, #{limit}
+  </select>
+
+  <select id="countPaymentNoticeFailed" resultType="java.lang.Long">
+    select count(1)
+    from port_pilotage.billing_vouchers bv
+      left join (
+        select voucher_id, max(id) as max_id
+        from port_pilotage.invoice_operation_logs
+        where operation_type = 'PAYMENT_NOTICE'
+        group by voucher_id
+      ) t on t.voucher_id = bv.id
+      left join port_pilotage.invoice_operation_logs l on l.id = t.max_id
+    where bv.audit_status = 'APPROVED'
+      and bv.payment_status = 'UNPAID'
+      and (t.max_id is null or l.result = 'FAIL')
+      <if test="keyword != null and keyword != ''">
+        and (bv.voucher_code like concat('%', #{keyword}, '%')
+          or bv.invoice_number like concat('%', #{keyword}, '%'))
+      </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from port_pilotage.invoice_operation_logs
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.InvoiceOperationLogs" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.invoice_operation_logs (voucher_id, operation_type, operation_by, 
+      operation_time, invoice_no, operation_details, 
+      `result`, error_message, notes, 
+      created_at)
+    values (#{voucherId,jdbcType=BIGINT}, #{operationType,jdbcType=OTHER}, #{operationBy,jdbcType=BIGINT}, 
+      #{operationTime,jdbcType=TIMESTAMP}, #{invoiceNo,jdbcType=VARCHAR}, #{operationDetails,jdbcType=VARCHAR}, 
+      #{result,jdbcType=OTHER}, #{errorMessage,jdbcType=LONGVARCHAR}, #{notes,jdbcType=LONGVARCHAR}, 
+      #{createdAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.InvoiceOperationLogs" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.invoice_operation_logs
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="voucherId != null">
+        voucher_id,
+      </if>
+      <if test="operationType != null">
+        operation_type,
+      </if>
+      <if test="operationBy != null">
+        operation_by,
+      </if>
+      <if test="operationTime != null">
+        operation_time,
+      </if>
+      <if test="invoiceNo != null">
+        invoice_no,
+      </if>
+      <if test="operationDetails != null">
+        operation_details,
+      </if>
+      <if test="result != null">
+        `result`,
+      </if>
+      <if test="errorMessage != null">
+        error_message,
+      </if>
+      <if test="notes != null">
+        notes,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="voucherId != null">
+        #{voucherId,jdbcType=BIGINT},
+      </if>
+      <if test="operationType != null">
+        #{operationType,jdbcType=OTHER},
+      </if>
+      <if test="operationBy != null">
+        #{operationBy,jdbcType=BIGINT},
+      </if>
+      <if test="operationTime != null">
+        #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceNo != null">
+        #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDetails != null">
+        #{operationDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        #{result,jdbcType=OTHER},
+      </if>
+      <if test="errorMessage != null">
+        #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="notes != null">
+        #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="syy.portPilotage.entity.InvoiceOperationLogs">
+    <!--@mbg.generated-->
+    update port_pilotage.invoice_operation_logs
+    <set>
+      <if test="voucherId != null">
+        voucher_id = #{voucherId,jdbcType=BIGINT},
+      </if>
+      <if test="operationType != null">
+        operation_type = #{operationType,jdbcType=OTHER},
+      </if>
+      <if test="operationBy != null">
+        operation_by = #{operationBy,jdbcType=BIGINT},
+      </if>
+      <if test="operationTime != null">
+        operation_time = #{operationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invoiceNo != null">
+        invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDetails != null">
+        operation_details = #{operationDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="result != null">
+        `result` = #{result,jdbcType=OTHER},
+      </if>
+      <if test="errorMessage != null">
+        error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="notes != null">
+        notes = #{notes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="syy.portPilotage.entity.InvoiceOperationLogs">
+    <!--@mbg.generated-->
+    update port_pilotage.invoice_operation_logs
+    set voucher_id = #{voucherId,jdbcType=BIGINT},
+      operation_type = #{operationType,jdbcType=OTHER},
+      operation_by = #{operationBy,jdbcType=BIGINT},
+      operation_time = #{operationTime,jdbcType=TIMESTAMP},
+      invoice_no = #{invoiceNo,jdbcType=VARCHAR},
+      operation_details = #{operationDetails,jdbcType=VARCHAR},
+      `result` = #{result,jdbcType=OTHER},
+      error_message = #{errorMessage,jdbcType=LONGVARCHAR},
+      notes = #{notes,jdbcType=LONGVARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.invoice_operation_logs
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="voucher_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.voucherId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="operation_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.operationType,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="operation_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.operationBy,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="operation_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.operationTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="invoice_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="operation_details = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.operationDetails,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="`result` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.result,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="error_message = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.errorMessage,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.notes,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.invoice_operation_logs
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="voucher_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.voucherId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.voucherId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="operation_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.operationType != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.operationType,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="operation_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.operationBy != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.operationBy,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="operation_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.operationTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.operationTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="invoice_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.invoiceNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="operation_details = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.operationDetails != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.operationDetails,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`result` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.result != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.result,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="error_message = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.errorMessage != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.errorMessage,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.notes != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.notes,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.invoice_operation_logs
+    (voucher_id, operation_type, operation_by, operation_time, invoice_no, operation_details, 
+      `result`, error_message, notes, created_at)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.voucherId,jdbcType=BIGINT}, #{item.operationType,jdbcType=OTHER}, #{item.operationBy,jdbcType=BIGINT}, 
+        #{item.operationTime,jdbcType=TIMESTAMP}, #{item.invoiceNo,jdbcType=VARCHAR}, #{item.operationDetails,jdbcType=VARCHAR}, 
+        #{item.result,jdbcType=OTHER}, #{item.errorMessage,jdbcType=LONGVARCHAR}, #{item.notes,jdbcType=LONGVARCHAR}, 
+        #{item.createdAt,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <delete id="deleteByPrimaryKeyIn">
+    <!--@mbg.generated-->
+    delete from port_pilotage.invoice_operation_logs where id in 
+    <foreach close=")" collection="list" item="id" open="(" separator=", ">
+      #{id,jdbcType=BIGINT}
+    </foreach>
+  </delete>
+</mapper>

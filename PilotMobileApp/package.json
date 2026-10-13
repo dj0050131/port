@@ -1,0 +1,21 @@
+{
+  "name": "pilot-mobile-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "引航员移动端（uni-app Vue3）",
+  "scripts": {
+    "dev": "echo \"建议使用HBuilderX运行本项目（uni-app）\""
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.UsersMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Users">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userCode" column="user_code" jdbcType="VARCHAR"/>
+            <result property="account" column="account" jdbcType="VARCHAR"/>
+            <result property="userType" column="user_type" jdbcType="OTHER"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="applyTime" column="apply_time" jdbcType="TIMESTAMP"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="currentStatus" column="current_status" jdbcType="OTHER"/>
+            <result property="agentLevelType" column="agent_level_type" jdbcType="VARCHAR"/>
+            <result property="parentAgentId" column="parent_agent_id" jdbcType="BIGINT"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="lastLoginAt" column="last_login_at" jdbcType="TIMESTAMP"/>
+            <result property="department" column="department" jdbcType="VARCHAR"/>
+            <result property="position" column="position" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_code,account,
+        user_type,username,password,
+        apply_time,phone,email,
+        current_status,agent_level_type,parent_agent_id,
+        avatar,last_login_at,department,
+        position,created_at,updated_at
+    </sql>
+</mapper>

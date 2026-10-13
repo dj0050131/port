@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.ChargeItemsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.ChargeItems">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="itemCode" column="item_code" jdbcType="VARCHAR"/>
+            <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+            <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+            <result property="itemNotes" column="item_notes" jdbcType="VARCHAR"/>
+            <result property="taxMethod" column="tax_method" jdbcType="OTHER"/>
+            <result property="taxRate" column="tax_rate" jdbcType="DECIMAL"/>
+            <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="OTHER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,item_code,category_id,
+        item_name,item_notes,tax_method,
+        tax_rate,sort_order,status,
+        created_at,updated_at
+    </sql>
+</mapper>

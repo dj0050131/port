@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PlanVehicleAssignmentsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PlanVehicleAssignments">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="planId" column="plan_id" jdbcType="BIGINT"/>
+            <result property="vehicleId" column="vehicle_id" jdbcType="BIGINT"/>
+            <result property="purpose" column="purpose" jdbcType="VARCHAR"/>
+            <result property="requirements" column="requirements" jdbcType="VARCHAR"/>
+            <result property="estimatedStartTime" column="estimated_start_time" jdbcType="TIMESTAMP"/>
+            <result property="estimatedEndTime" column="estimated_end_time" jdbcType="TIMESTAMP"/>
+            <result property="actualStartTime" column="actual_start_time" jdbcType="TIMESTAMP"/>
+            <result property="actualEndTime" column="actual_end_time" jdbcType="TIMESTAMP"/>
+            <result property="actualMileage" column="actual_mileage" jdbcType="DECIMAL"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="fuelConsumption" column="fuel_consumption" jdbcType="DECIMAL"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,plan_id,vehicle_id,purpose,requirements,estimated_start_time,
+        estimated_end_time,actual_start_time,actual_end_time,actual_mileage,status,
+        fuel_consumption,created_at,updated_at
+    </sql>
+</mapper>

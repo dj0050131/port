@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotageRequestsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PilotageRequests">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="requestCode" column="request_code" jdbcType="VARCHAR"/>
+            <result property="vesselId" column="vessel_id" jdbcType="BIGINT"/>
+            <result property="voyageId" column="voyage_id" jdbcType="BIGINT"/>
+            <result property="expectedBerthId" column="expected_berth_id" jdbcType="BIGINT"/>
+            <result property="bargeNumber" column="barge_number" jdbcType="VARCHAR"/>
+            <result property="inboundDraftForward" column="inbound_draft_forward" jdbcType="DECIMAL"/>
+            <result property="inboundDraftAft" column="inbound_draft_aft" jdbcType="DECIMAL"/>
+            <result property="totalPassengers" column="total_passengers" jdbcType="INTEGER"/>
+            <result property="totalCrew" column="total_crew" jdbcType="INTEGER"/>
+            <result property="inboundCargoName" column="inbound_cargo_name" jdbcType="VARCHAR"/>
+            <result property="inboundCargoTotalWeight" column="inbound_cargo_total_weight" jdbcType="DECIMAL"/>
+            <result property="inboundGeneralCargoDetails" column="inbound_general_cargo_details" jdbcType="VARCHAR"/>
+            <result property="inboundDangerousCargoDetails" column="inbound_dangerous_cargo_details" jdbcType="VARCHAR"/>
+            <result property="outboundCargoName" column="outbound_cargo_name" jdbcType="VARCHAR"/>
+            <result property="outboundCargoTotalWeight" column="outbound_cargo_total_weight" jdbcType="DECIMAL"/>
+            <result property="outboundGeneralCargoDetails" column="outbound_general_cargo_details" jdbcType="VARCHAR"/>
+            <result property="outboundDangerousCargoDetails" column="outbound_dangerous_cargo_details" jdbcType="VARCHAR"/>
+            <result property="requestNotes" column="request_notes" jdbcType="VARCHAR"/>
+            <result property="applicant" column="applicant" jdbcType="VARCHAR"/>
+            <result property="applicationDate" column="application_date" jdbcType="DATE"/>
+            <result property="requestSource" column="request_source" jdbcType="VARCHAR"/>
+            <result property="visaProcessingResult" column="visa_processing_result" jdbcType="VARCHAR"/>
+            <result property="requestStatus" column="request_status" jdbcType="OTHER"/>
+            <result property="reviewerId" column="reviewer_id" jdbcType="BIGINT"/>
+            <result property="reviewedAt" column="reviewed_at" jdbcType="TIMESTAMP"/>
+            <result property="rejectReason" column="reject_reason" jdbcType="VARCHAR"/>
+            <result property="priority" column="priority" jdbcType="OTHER"/>
+            <result property="specialRequirements" column="special_requirements" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,request_code,vessel_id,
+        voyage_id,expected_berth_id,barge_number,
+        inbound_draft_forward,inbound_draft_aft,total_passengers,
+        total_crew,inbound_cargo_name,inbound_cargo_total_weight,
+        inbound_general_cargo_details,inbound_dangerous_cargo_details,outbound_cargo_name,
+        outbound_cargo_total_weight,outbound_general_cargo_details,outbound_dangerous_cargo_details,
+        request_notes,applicant,application_date,
+        request_source,visa_processing_result,request_status,
+        reviewer_id,reviewed_at,reject_reason,
+        priority,special_requirements,created_at,
+        updated_at
+    </sql>
+</mapper>

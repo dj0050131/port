@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.TaxRecordsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.TaxRecords">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taxRecordCode" column="tax_record_code" jdbcType="VARCHAR"/>
+            <result property="voucherId" column="voucher_id" jdbcType="BIGINT"/>
+            <result property="billingVoucherCode" column="billing_voucher_code" jdbcType="VARCHAR"/>
+            <result property="voyageId" column="voyage_id" jdbcType="BIGINT"/>
+            <result property="vesselId" column="vessel_id" jdbcType="BIGINT"/>
+            <result property="agentId" column="agent_id" jdbcType="BIGINT"/>
+            <result property="taxpayerId" column="taxpayer_id" jdbcType="VARCHAR"/>
+            <result property="taxpayerName" column="taxpayer_name" jdbcType="VARCHAR"/>
+            <result property="taxpayerAddress" column="taxpayer_address" jdbcType="VARCHAR"/>
+            <result property="taxpayerPhone" column="taxpayer_phone" jdbcType="VARCHAR"/>
+            <result property="taxpayerBank" column="taxpayer_bank" jdbcType="VARCHAR"/>
+            <result property="taxpayerBankAccount" column="taxpayer_bank_account" jdbcType="VARCHAR"/>
+            <result property="taxableAmount" column="taxable_amount" jdbcType="DECIMAL"/>
+            <result property="totalTaxAmount" column="total_tax_amount" jdbcType="DECIMAL"/>
+            <result property="taxPeriod" column="tax_period" jdbcType="DATE"/>
+            <result property="taxCalculationTime" column="tax_calculation_time" jdbcType="TIMESTAMP"/>
+            <result property="taxPolicyCode" column="tax_policy_code" jdbcType="VARCHAR"/>
+            <result property="taxPolicyName" column="tax_policy_name" jdbcType="VARCHAR"/>
+            <result property="isTaxExempt" column="is_tax_exempt" jdbcType="TINYINT"/>
+            <result property="taxExemptReason" column="tax_exempt_reason" jdbcType="VARCHAR"/>
+            <result property="taxExemptApprovalNo" column="tax_exempt_approval_no" jdbcType="VARCHAR"/>
+            <result property="taxStatus" column="tax_status" jdbcType="OTHER"/>
+            <result property="transferTarget" column="transfer_target" jdbcType="VARCHAR"/>
+            <result property="transferTime" column="transfer_time" jdbcType="TIMESTAMP"/>
+            <result property="externalTaxNo" column="external_tax_no" jdbcType="VARCHAR"/>
+            <result property="externalDeclarationNo" column="external_declaration_no" jdbcType="VARCHAR"/>
+            <result property="transferOperatorId" column="transfer_operator_id" jdbcType="BIGINT"/>
+            <result property="transferNotes" column="transfer_notes" jdbcType="VARCHAR"/>
+            <result property="reviewerId" column="reviewer_id" jdbcType="BIGINT"/>
+            <result property="reviewTime" column="review_time" jdbcType="TIMESTAMP"/>
+            <result property="reviewNotes" column="review_notes" jdbcType="VARCHAR"/>
+            <result property="approverId" column="approver_id" jdbcType="BIGINT"/>
+            <result property="approveTime" column="approve_time" jdbcType="TIMESTAMP"/>
+            <result property="calculationMethod" column="calculation_method" jdbcType="OTHER"/>
+            <result property="dataSource" column="data_source" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="isActive" column="is_active" jdbcType="TINYINT"/>
+            <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
+            <result property="updatedBy" column="updated_by" jdbcType="BIGINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tax_record_code,voucher_id,billing_voucher_code,voyage_id,vessel_id,
+        agent_id,taxpayer_id,taxpayer_name,taxpayer_address,taxpayer_phone,
+        taxpayer_bank,taxpayer_bank_account,taxable_amount,total_tax_amount,tax_period,
+        tax_calculation_time,tax_policy_code,tax_policy_name,is_tax_exempt,tax_exempt_reason,
+        tax_exempt_approval_no,tax_status,transfer_target,transfer_time,external_tax_no,
+        external_declaration_no,transfer_operator_id,transfer_notes,reviewer_id,review_time,
+        review_notes,approver_id,approve_time,calculation_method,data_source,
+        version,is_active,created_by,updated_by,created_at,
+        updated_at
+    </sql>
+</mapper>

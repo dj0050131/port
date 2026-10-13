@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.BerthsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Berths">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="berthCode" column="berth_code" jdbcType="VARCHAR"/>
+        <result property="portArea" column="port_area" jdbcType="VARCHAR"/>
+        <result property="berthType" column="berth_type" jdbcType="VARCHAR"/>
+        <result property="berthName" column="berth_name" jdbcType="VARCHAR"/>
+        <result property="wharfDirection" column="wharf_direction" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="DECIMAL"/>
+        <result property="latitude" column="latitude" jdbcType="DECIMAL"/>
+        <result property="startLatitude" column="start_latitude" jdbcType="DECIMAL"/>
+        <result property="startLongitude" column="start_longitude" jdbcType="DECIMAL"/>
+        <result property="endLatitude" column="end_latitude" jdbcType="DECIMAL"/>
+        <result property="endLongitude" column="end_longitude" jdbcType="DECIMAL"/>
+        <result property="berthDirection" column="berth_direction" jdbcType="VARCHAR"/>
+        <result property="maxDraft" column="max_draft" jdbcType="DECIMAL"/>
+        <result property="berthLength" column="berth_length" jdbcType="DECIMAL"/>
+        <result property="berthDepth" column="berth_depth" jdbcType="DECIMAL"/>
+        <result property="berthStatus" column="berth_status" jdbcType="OTHER"/>
+        <result property="contactPhone" column="contact_phone" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="portAreaId" column="port_area_id" jdbcType="BIGINT"/>
+        <result property="wharfId" column="wharf_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,berth_code,port_area,berth_type,berth_name,wharf_direction,
+        longitude,latitude,start_latitude,start_longitude,end_latitude,
+        end_longitude,berth_direction,max_draft,berth_length,berth_depth,
+        berth_status,contact_phone,created_at,updated_at,port_area_id,
+        wharf_id
+    </sql>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.VoyagesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Voyages">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="vesselId" column="vessel_id" jdbcType="BIGINT"/>
+            <result property="voyageNumber" column="voyage_number" jdbcType="VARCHAR"/>
+            <result property="voyageType" column="voyage_type" jdbcType="OTHER"/>
+            <result property="previousPort" column="previous_port" jdbcType="VARCHAR"/>
+            <result property="nextPort" column="next_port" jdbcType="VARCHAR"/>
+            <result property="eta" column="eta" jdbcType="TIMESTAMP"/>
+            <result property="etaAnchorage" column="eta_anchorage" jdbcType="TIMESTAMP"/>
+            <result property="ata" column="ata" jdbcType="TIMESTAMP"/>
+            <result property="etd" column="etd" jdbcType="TIMESTAMP"/>
+            <result property="atd" column="atd" jdbcType="TIMESTAMP"/>
+            <result property="cargoName" column="cargo_name" jdbcType="VARCHAR"/>
+            <result property="cargoType" column="cargo_type" jdbcType="VARCHAR"/>
+            <result property="cargoQuantity" column="cargo_quantity" jdbcType="DECIMAL"/>
+            <result property="cargoUnit" column="cargo_unit" jdbcType="VARCHAR"/>
+            <result property="draftForward" column="draft_forward" jdbcType="DECIMAL"/>
+            <result property="draftAft" column="draft_aft" jdbcType="DECIMAL"/>
+            <result property="totalPassengers" column="total_passengers" jdbcType="INTEGER"/>
+            <result property="totalCrew" column="total_crew" jdbcType="INTEGER"/>
+            <result property="voyageStatus" column="voyage_status" jdbcType="OTHER"/>
+            <result property="agentId" column="agent_id" jdbcType="BIGINT"/>
+            <result property="plannedStartId" column="planned_start_id" jdbcType="BIGINT"/>
+            <result property="actualStartId" column="actual_start_id" jdbcType="BIGINT"/>
+            <result property="portOfDestinationId" column="port_of_destination_id" jdbcType="BIGINT"/>
+            <result property="portOfDepartureId" column="port_of_departure_id" jdbcType="BIGINT"/>
+            <result property="plannedEndId" column="planned_end_id" jdbcType="BIGINT"/>
+            <result property="actualEndId" column="actual_end_id" jdbcType="BIGINT"/>
+            <result property="startLocationType" column="start_location_type" jdbcType="VARCHAR"/>
+            <result property="endLocationType" column="end_location_type" jdbcType="VARCHAR"/>
+            <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+            <result property="pilotageRequestsId" column="pilotage_requests_id" jdbcType="BIGINT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,vessel_id,voyage_number,
+        voyage_type,previous_port,next_port,
+        eta,eta_anchorage,ata,etd,
+        atd,cargo_name,cargo_type,
+        cargo_quantity,cargo_unit,draft_forward,
+        draft_aft,total_passengers,total_crew,
+        voyage_status,agent_id,planned_start_id,
+        actual_start_id,port_of_destination_id,port_of_departure_id,
+        planned_end_id,actual_end_id,
+        start_location_type,end_location_type,
+        pilotage_requests_id,
+        remarks,created_at,updated_at
+    </sql>
+</mapper>

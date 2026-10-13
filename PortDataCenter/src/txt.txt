@@ -1,0 +1,17 @@
+//    "build": "vue-tsc -b && vite build",
+
+
+分析一下签证单这个页面有哪些操作，提交签证单的时候需要填哪些数据，或者是直接提交，json（数据库表中）这些空的信息从哪些表获取，或者是怎么填，提交签证单后的操作是什么，这些都具体分析一下
+
+根据我的数据库给我画一个流程图，需要包含所有数据的流向，从开始到结束，哪些表的数据从哪里来，到哪里去，使用表名和中文表名详细的给我整理出来
+
+现在的签证单表为  `start_berth_id` bigint DEFAULT NULL COMMENT '开始泊位ID',
+  `end_berth_id` bigint DEFAULT NULL COMMENT '结束泊位ID',
+这样的设计怎么处理从锚地到泊位，从锚地到锚地，以及从泊位到锚地呢，
+ `berthing_assistance_flag` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT '助泊标记',
+  `berthing_assistance_charge` decimal(10,2) DEFAULT NULL COMMENT '助泊(护航)计费',
+  `inbound_agent_id` bigint DEFAULT NULL COMMENT '进口船代ID',
+  `outbound_agent_id` bigint DEFAULT NULL COMMENT '出口船代ID',
+这四个的字段数据怎么获取，在那个流程中获取，以及这四个字段是什么意思
+
+ 这个校验的时机有问题，在我选择了开始或者结束的位置之后，并不是立马通过的，而是需要另外一个改动的时候才会触发校验，导致了我完成了最后一个选择的时候需要再选一次才会正确，修正一下这个部分

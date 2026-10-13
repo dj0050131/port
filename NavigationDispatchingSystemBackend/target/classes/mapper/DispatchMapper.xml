@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.DispatchMapper">
+
+    <!-- 调度列表分页查询 -->
+    <!-- 调度列表分页查询 -->
+    <select id="selectDispatchPage" resultType="syy.portPilotage.dto.dispatch.DispatchPlanDTO">
+        SELECT
+        -- 计划基本信息
+        pp.id as planId,
+        pp.plan_code as planCode,
+        pp.plan_start_time as planStartTime,
+        pp.plan_end_time as planEndTime,
+        pp.plan_status as planStatus,
+        pp.start_location_name as startLocationName,
+        pp.end_location_name as endLocationName,
+        pp.boarding_time as boardingTime,
+        pp.leaving_time as leavingTime,
+        pp.notes,
+
+        -- 船舶信息
+        v.name_zh as vesselNameZh,
+        v.name_en as vesselNameEn,
+        v.vessel_call_sign as vesselCallSign,
+        v.vessel_length as vesselLength,
+        v.vessel_width as vesselWidth,
+        v.gross_tonnage as grossTonnage,
+        v.nationality as nationality,
+        v.net_tonnage as netTonnage,
+        v.deadweight as deadWeight,
+        v.nationality,
+
+        -- 航次信息
+        voy.voyage_number as voyageNumber,
+        voy.voyage_type as voyageType,
+        voy.eta,
+        voy.etd,
+
+        -- 代理信息
+        a.company_name as agentName,
+        a.contact_person as agentContact,
+        a.phone as agentPhone,
+
+        -- 引航员信息
+        pilot.pilot_name as mainPilot,
+        pilot.phone as pilotPhone,
+        pilot.short_number as pilotShortNum,
+
+        -- 驾驶员信息
+        driver.name as driverName,
+        driver.phone as driverPhone,
+        driver.license_number as licenseNumber,
+
+        -- 车辆信息
+        vehicle.license_plate as licensePlate,
+        vehicle.vehicle_model as vehicleModel,
+        vehicle.vehicle_status as vehicleStatus,
+
+        -- 拖轮分配信息（使用GROUP_CONCAT聚合）
+        (
+        SELECT GROUP_CONCAT(DISTINCT t.tugboat_name SEPARATOR ', ')
+        FROM plan_tugboat_assignments pta
+        INNER JOIN tugboats t ON pta.tugboat_id = t.id
+        WHERE pta.plan_id = pp.id
+        AND pta.status IN ('ASSIGNED', 'CONFIRMED', 'COMPLETED')
+        ) as tugboats,
+
+        -- 引航艇分配信息（使用GROUP_CONCAT聚合）
+        (
+        SELECT GROUP_CONCAT(DISTINCT pb.boat_name SEPARATOR ', ')
+        FROM plan_pilot_boat_assignments ppba
+        INNER JOIN pilot_boats pb ON ppba.pilot_boat_id = pb.id
+        WHERE ppba.plan_id = pp.id
+        AND ppba.status IN ('ASSIGNED', 'CONFIRMED', 'COMPLETED')
+        ) as pilotBoats,
+
+        -- 确认统计信息（从分配表统计CONFIRMED状态）
+        (
+        -- 注意：MySQL 中派生表( FROM ( ... ) temp ) 默认不支持引用外层查询别名 pp（除非使用 LATERAL）。
+        -- 这里改为“各分配表确认数求和”，语义等价且兼容性更好。
+            (
+                SELECT COUNT(*) FROM plan_pilot_assignments WHERE plan_id = pp.id AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+                SELECT COUNT(*) FROM plan_driver_assignments WHERE plan_id = pp.id AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+                SELECT COUNT(*) FROM plan_tugboat_assignments WHERE plan_id = pp.id AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+                SELECT COUNT(*) FROM plan_pilot_boat_assignments WHERE plan_id = pp.id AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+                SELECT COUNT(*) FROM plan_vehicle_assignments WHERE plan_id = pp.id AND status IN ('CONFIRMED', 'COMPLETED')
+            )
+        ) as confirmedCount,
+
+        -- 总分配资源数
+        (
+        SELECT COUNT(*) FROM plan_pilot_assignments WHERE plan_id = pp.id AND status != 'CANCELLED'
+        ) + (
+        SELECT COUNT(*) FROM plan_driver_assignments WHERE plan_id = pp.id AND status != 'CANCELLED'
+        ) + (
+        SELECT COUNT(*) FROM plan_tugboat_assignments WHERE plan_id = pp.id AND status != 'CANCELLED'
+        ) + (
+        SELECT COUNT(*) FROM plan_pilot_boat_assignments WHERE plan_id = pp.id AND status != 'CANCELLED'
+        ) + (
+        SELECT COUNT(*) FROM plan_vehicle_assignments WHERE plan_id = pp.id AND status != 'CANCELLED'
+        ) as totalResourcesCount
+
+        FROM pilotage_plans pp
+
+        -- 关联船舶表
+        LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+        -- 关联航次表
+        LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+        -- 关联代理表
+        LEFT JOIN agents a ON voy.agent_id = a.id
+
+        -- 关联引航员表
+        LEFT JOIN pilots pilot ON pp.assigned_pilot_id = pilot.id
+
+        -- 关联驾驶员表
+        LEFT JOIN drivers driver ON pp.assigned_driver_id = driver.id
+
+        -- 关联车辆表
+        LEFT JOIN vehicles vehicle ON pp.assigned_vehicle_id = vehicle.id
+
+        WHERE 1=1
+        -- 调度筛选条件：只显示已确认、已发布、进行中的计划
+        <if test="params.planStatusFilter != null">
+            AND pp.plan_status IN
+            <foreach collection="params.planStatusFilter" item="status" open="(" separator="," close=")">
+                #{status}
+            </foreach>
+        </if>
+
+        <if test="params.planStatus != null and params.planStatus != ''">
+            AND pp.plan_status = #{params.planStatus}
+        </if>
+
+        <if test="params.startDate != null and params.endDate != null">
+            AND pp.plan_start_time BETWEEN #{params.startDate} AND #{params.endDate}
+        </if>
+
+        <if test="params.vesselName != null and params.vesselName != ''">
+            AND (v.name_zh LIKE CONCAT('%', #{params.vesselName}, '%')
+            OR v.name_en LIKE CONCAT('%', #{params.vesselName}, '%'))
+        </if>
+
+        <if test="params.planCode != null and params.planCode != ''">
+            AND pp.plan_code LIKE CONCAT('%', #{params.planCode}, '%')
+        </if>
+
+        <if test="params.pilotName != null and params.pilotName != ''">
+            AND pilot.pilot_name LIKE CONCAT('%', #{params.pilotName}, '%')
+        </if>
+
+        <if test="params.confirmationLevel != null and params.confirmationLevel != ''">
+            <choose>
+                <when test="params.confirmationLevel == 'ALL_CONFIRMED'">
+                    -- 所有资源已确认（需要在HAVING子句中处理）
+                    HAVING confirmedCount = totalResourcesCount
+                </when>
+                <when test="params.confirmationLevel == 'PARTIAL_CONFIRMED'">
+                    -- 部分资源已确认
+                    HAVING confirmedCount > 0 AND confirmedCount &lt; totalResourcesCount
+                </when>
+                <when test="params.confirmationLevel == 'NOT_CONFIRMED'">
+                    -- 无资源确认
+                    HAVING confirmedCount = 0
+                </when>
+            </choose>
+        </if>
+
+        ORDER BY
+        CASE pp.plan_status
+        WHEN 'ONGOING' THEN 1
+        WHEN 'PUBLISHED' THEN 2
+        WHEN 'CONFIRMED' THEN 3
+        ELSE 4
+        END,
+        pp.plan_start_time ASC
+    </select>
+
+    <select id="selectDispatchDetail" resultType="map">
+        SELECT
+            -- 计划基本信息
+            pp.*,
+
+            -- 船舶信息
+            v.*,
+
+            -- 航次信息
+            voy.*,
+
+            -- 代理信息
+            a.*
+
+        FROM pilotage_plans pp
+
+                 -- 关联船舶表
+                 LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+            -- 关联航次表
+                 LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+            -- 关联代理表
+                 LEFT JOIN agents a ON voy.agent_id = a.id
+
+        WHERE pp.id = #{planId}
+    </select>
+
+    <!-- 获取计划的资源确认统计（包含所有分配的资源） -->
+    <!-- 获取计划的资源确认统计（从分配表统计） -->
+    <select id="selectPlanConfirmationStats" resultType="map">
+        SELECT
+            -- 总分配资源数
+            (
+                SELECT COUNT(*) FROM plan_pilot_assignments WHERE plan_id = #{planId} AND status != 'CANCELLED'
+                ) + (
+        SELECT COUNT(*) FROM plan_driver_assignments WHERE plan_id = #{planId} AND status != 'CANCELLED'
+            ) + (
+        SELECT COUNT(*) FROM plan_tugboat_assignments WHERE plan_id = #{planId} AND status != 'CANCELLED'
+            ) + (
+        SELECT COUNT(*) FROM plan_pilot_boat_assignments WHERE plan_id = #{planId} AND status != 'CANCELLED'
+            ) + (
+        SELECT COUNT(*) FROM plan_vehicle_assignments WHERE plan_id = #{planId} AND status != 'CANCELLED'
+            ) as total_count,
+
+                                                      -- 已确认资源数（从分配表统计CONFIRMED状态）
+                                                          (
+        SELECT COUNT(*) FROM plan_pilot_assignments WHERE plan_id = #{planId} AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+        SELECT COUNT(*) FROM plan_driver_assignments WHERE plan_id = #{planId} AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+        SELECT COUNT(*) FROM plan_tugboat_assignments WHERE plan_id = #{planId} AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+        SELECT COUNT(*) FROM plan_pilot_boat_assignments WHERE plan_id = #{planId} AND status IN ('CONFIRMED', 'COMPLETED')
+            ) + (
+        SELECT COUNT(*) FROM plan_vehicle_assignments WHERE plan_id = #{planId} AND status IN ('CONFIRMED', 'COMPLETED')
+            ) as confirmed_count
+    </select>
+
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotBoatsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PilotBoats">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="vesselCallSign" column="vessel_call_sign" jdbcType="VARCHAR"/>
+            <result property="boatName" column="boat_name" jdbcType="VARCHAR"/>
+            <result property="imoNumber" column="imo_number" jdbcType="VARCHAR"/>
+            <result property="operationRange" column="operation_range" jdbcType="VARCHAR"/>
+            <result property="engineModel" column="engine_model" jdbcType="VARCHAR"/>
+            <result property="enginePower" column="engine_power" jdbcType="VARCHAR"/>
+            <result property="rpmThrustForward" column="rpm_thrust_forward" jdbcType="VARCHAR"/>
+            <result property="rpmThrustReverse" column="rpm_thrust_reverse" jdbcType="VARCHAR"/>
+            <result property="towingForce" column="towing_force" jdbcType="VARCHAR"/>
+            <result property="navigationEquipment" column="navigation_equipment" jdbcType="VARCHAR"/>
+            <result property="buildDate" column="build_date" jdbcType="DATE"/>
+            <result property="shipyard" column="shipyard" jdbcType="VARCHAR"/>
+            <result property="maintenanceRecord" column="maintenance_record" jdbcType="VARCHAR"/>
+            <result property="currentStatus" column="current_status" jdbcType="OTHER"/>
+            <result property="currentLocation" column="current_location" jdbcType="VARCHAR"/>
+            <result property="maxSpeed" column="max_speed" jdbcType="DECIMAL"/>
+            <result property="passengerCapacity" column="passenger_capacity" jdbcType="INTEGER"/>
+            <result property="lastMaintenanceDate" column="last_maintenance_date" jdbcType="DATE"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,vessel_call_sign,boat_name,
+        imo_number,operation_range,engine_model,
+        engine_power,rpm_thrust_forward,rpm_thrust_reverse,
+        towing_force,navigation_equipment,build_date,
+        shipyard,maintenance_record,current_status,
+        current_location,max_speed,passenger_capacity,
+        last_maintenance_date,created_at,updated_at
+    </sql>
+</mapper>

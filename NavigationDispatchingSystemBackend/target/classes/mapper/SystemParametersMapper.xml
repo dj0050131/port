@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.SystemParametersMapper">
+  <resultMap id="BaseResultMap" type="syy.portPilotage.entity.SystemParameters">
+    <!--@mbg.generated-->
+    <!--@Table port_pilotage.system_parameters-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="param_group" jdbcType="VARCHAR" property="paramGroup" />
+    <result column="param_key" jdbcType="VARCHAR" property="paramKey" />
+    <result column="param_value" jdbcType="LONGVARCHAR" property="paramValue" />
+    <result column="param_name" jdbcType="VARCHAR" property="paramName" />
+    <result column="is_system" jdbcType="BOOLEAN" property="isSystem" />
+    <result column="sort_order" jdbcType="INTEGER" property="sortOrder" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, param_group, param_key, param_value, param_name, is_system, sort_order, created_at, 
+    updated_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from port_pilotage.system_parameters
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByGroup" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from port_pilotage.system_parameters
+    where param_group = #{paramGroup,jdbcType=VARCHAR}
+    order by sort_order asc, id asc
+  </select>
+
+  <select id="selectPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from port_pilotage.system_parameters
+    <where>
+      <if test="paramGroup != null and paramGroup != ''">
+        and param_group = #{paramGroup,jdbcType=VARCHAR}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        and (
+          param_key like concat('%', #{keyword}, '%')
+          or param_name like concat('%', #{keyword}, '%')
+          or param_value like concat('%', #{keyword}, '%')
+        )
+      </if>
+    </where>
+    order by param_group asc, sort_order asc, id asc
+    limit #{offset}, #{limit}
+  </select>
+
+  <select id="countPage" resultType="java.lang.Long">
+    select count(1)
+    from port_pilotage.system_parameters
+    <where>
+      <if test="paramGroup != null and paramGroup != ''">
+        and param_group = #{paramGroup,jdbcType=VARCHAR}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        and (
+          param_key like concat('%', #{keyword}, '%')
+          or param_name like concat('%', #{keyword}, '%')
+          or param_value like concat('%', #{keyword}, '%')
+        )
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from port_pilotage.system_parameters
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.SystemParameters" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.system_parameters (param_group, param_key, param_value, 
+      param_name, is_system, sort_order, 
+      created_at, updated_at)
+    values (#{paramGroup,jdbcType=VARCHAR}, #{paramKey,jdbcType=VARCHAR}, #{paramValue,jdbcType=LONGVARCHAR}, 
+      #{paramName,jdbcType=VARCHAR}, #{isSystem,jdbcType=BOOLEAN}, #{sortOrder,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.SystemParameters" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.system_parameters
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paramGroup != null">
+        param_group,
+      </if>
+      <if test="paramKey != null">
+        param_key,
+      </if>
+      <if test="paramValue != null">
+        param_value,
+      </if>
+      <if test="paramName != null">
+        param_name,
+      </if>
+      <if test="isSystem != null">
+        is_system,
+      </if>
+      <if test="sortOrder != null">
+        sort_order,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paramGroup != null">
+        #{paramGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="paramKey != null">
+        #{paramKey,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null">
+        #{paramValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="paramName != null">
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="isSystem != null">
+        #{isSystem,jdbcType=BOOLEAN},
+      </if>
+      <if test="sortOrder != null">
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="syy.portPilotage.entity.SystemParameters">
+    <!--@mbg.generated-->
+    update port_pilotage.system_parameters
+    <set>
+      <if test="paramGroup != null">
+        param_group = #{paramGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="paramKey != null">
+        param_key = #{paramKey,jdbcType=VARCHAR},
+      </if>
+      <if test="paramValue != null">
+        param_value = #{paramValue,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="paramName != null">
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="isSystem != null">
+        is_system = #{isSystem,jdbcType=BOOLEAN},
+      </if>
+      <if test="sortOrder != null">
+        sort_order = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="syy.portPilotage.entity.SystemParameters">
+    <!--@mbg.generated-->
+    update port_pilotage.system_parameters
+    set param_group = #{paramGroup,jdbcType=VARCHAR},
+      param_key = #{paramKey,jdbcType=VARCHAR},
+      param_value = #{paramValue,jdbcType=LONGVARCHAR},
+      param_name = #{paramName,jdbcType=VARCHAR},
+      is_system = #{isSystem,jdbcType=BOOLEAN},
+      sort_order = #{sortOrder,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.system_parameters
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="param_group = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.paramGroup,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="param_key = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.paramKey,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="param_value = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.paramValue,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="param_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.paramName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="is_system = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.isSystem,jdbcType=BOOLEAN}
+        </foreach>
+      </trim>
+      <trim prefix="sort_order = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.sortOrder,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="updated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.updatedAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.system_parameters
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="param_group = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.paramGroup != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.paramGroup,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="param_key = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.paramKey != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.paramKey,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="param_value = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.paramValue != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.paramValue,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="param_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.paramName != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.paramName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="is_system = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.isSystem != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.isSystem,jdbcType=BOOLEAN}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="sort_order = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.sortOrder != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.sortOrder,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.updatedAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.system_parameters
+    (param_group, param_key, param_value, param_name, is_system, sort_order, created_at, 
+      updated_at)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.paramGroup,jdbcType=VARCHAR}, #{item.paramKey,jdbcType=VARCHAR}, #{item.paramValue,jdbcType=LONGVARCHAR}, 
+        #{item.paramName,jdbcType=VARCHAR}, #{item.isSystem,jdbcType=BOOLEAN}, #{item.sortOrder,jdbcType=INTEGER}, 
+        #{item.createdAt,jdbcType=TIMESTAMP}, #{item.updatedAt,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <delete id="deleteByPrimaryKeyIn">
+    <!--@mbg.generated-->
+    delete from port_pilotage.system_parameters where id in 
+    <foreach close=")" collection="list" item="id" open="(" separator=", ">
+      #{id,jdbcType=BIGINT}
+    </foreach>
+  </delete>
+</mapper>

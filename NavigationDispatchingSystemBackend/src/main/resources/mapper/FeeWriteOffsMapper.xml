@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.FeeWriteOffsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.FeeWriteOffs">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="writeOffCode" column="write_off_code" jdbcType="VARCHAR"/>
+            <result property="agentId" column="agent_id" jdbcType="BIGINT"/>
+            <result property="writeOffPerson" column="write_off_person" jdbcType="VARCHAR"/>
+            <result property="writeOffDate" column="write_off_date" jdbcType="DATE"/>
+            <result property="auditor" column="auditor" jdbcType="VARCHAR"/>
+            <result property="auditTime" column="audit_time" jdbcType="TIMESTAMP"/>
+            <result property="statusCode" column="status_code" jdbcType="VARCHAR"/>
+            <result property="statusName" column="status_name" jdbcType="VARCHAR"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="writeOffType" column="write_off_type" jdbcType="VARCHAR"/>
+            <result property="documentAttribute" column="document_attribute" jdbcType="VARCHAR"/>
+            <result property="writeOffAmount" column="write_off_amount" jdbcType="DECIMAL"/>
+            <result property="writeOffMethod" column="write_off_method" jdbcType="VARCHAR"/>
+            <result property="bankReferenceNumber" column="bank_reference_number" jdbcType="VARCHAR"/>
+            <result property="voucherNumber" column="voucher_number" jdbcType="VARCHAR"/>
+            <result property="financeConfirmer" column="finance_confirmer" jdbcType="VARCHAR"/>
+            <result property="financeConfirmTime" column="finance_confirm_time" jdbcType="TIMESTAMP"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,write_off_code,agent_id,
+        write_off_person,write_off_date,auditor,
+        audit_time,status_code,status_name,
+        notes,write_off_type,document_attribute,
+        write_off_amount,write_off_method,bank_reference_number,
+        voucher_number,finance_confirmer,finance_confirm_time,
+        created_at,updated_at
+    </sql>
+</mapper>

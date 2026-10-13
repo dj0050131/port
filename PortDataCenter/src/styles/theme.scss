@@ -1,0 +1,72 @@
+/* Tidal Blue Theme */
+:root {
+  /* Brand Colors */
+  --tidal-primary: #006994; /* Ocean Blue */
+  --tidal-primary-dark: #004c6d;
+  --tidal-primary-light: #4db6e3;
+  
+  --tidal-secondary: #00334e; /* Deep Navy */
+  --tidal-accent: #00a8cc; /* Bright Cyan */
+  
+  --tidal-bg-body: #f0f7fa;
+  --tidal-bg-card: #ffffff;
+  --tidal-bg-sidebar: #002538;
+  
+  --tidal-text-main: #002538;
+  --tidal-text-secondary: #587c91;
+  --tidal-text-inverse: #ffffff;
+  
+  --tidal-border: #dcecf5;
+
+  /* Element Plus Overrides */
+  --el-color-primary: var(--tidal-primary);
+  --el-color-primary-light-3: #3387a9;
+  --el-color-primary-light-5: #66a5bf;
+  --el-color-primary-light-7: #99c3d4;
+  --el-color-primary-light-8: #b3d2df;
+  --el-color-primary-light-9: #e6f0f4;
+  --el-color-primary-dark-2: var(--tidal-primary-dark);
+
+  --el-text-color-primary: var(--tidal-text-main);
+  --el-text-color-regular: var(--tidal-text-secondary);
+  
+  --el-bg-color: var(--tidal-bg-card);
+  --el-bg-color-page: var(--tidal-bg-body);
+  
+  --el-border-color: var(--tidal-border);
+  --el-border-color-light: #e8f4fa;
+  
+  /* Shape - No Border Radius (except avatars) */
+  --el-border-radius-base: 0px;
+  --el-border-radius-small: 0px;
+  --el-border-radius-round: 0px;
+  --el-border-radius-circle: 0px; /* We will manually override this for avatars */
+}
+
+/* Global Shape Reset */
+* {
+  border-radius: 0 !important;
+}
+
+/* Exception: Avatars */
+.el-avatar, 
+.el-avatar *,
+.user-avatar,
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+body {
+  background-color: var(--tidal-bg-body);
+  color: var(--tidal-text-main);
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+}
+
+
+
+
+
+
+
+
+

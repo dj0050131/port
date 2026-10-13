@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.TideInfoMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.TideInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="tideDate" column="tide_date" jdbcType="DATE"/>
+            <result property="region" column="region" jdbcType="VARCHAR"/>
+            <result property="highTideTime1" column="high_tide_time1" jdbcType="TIME"/>
+            <result property="highTideHeight1" column="high_tide_height1" jdbcType="DECIMAL"/>
+            <result property="highTideTime2" column="high_tide_time2" jdbcType="TIME"/>
+            <result property="highTideHeight2" column="high_tide_height2" jdbcType="DECIMAL"/>
+            <result property="lowTideTime1" column="low_tide_time1" jdbcType="TIME"/>
+            <result property="lowTideHeight1" column="low_tide_height1" jdbcType="DECIMAL"/>
+            <result property="lowTideTime2" column="low_tide_time2" jdbcType="TIME"/>
+            <result property="lowTideHeight2" column="low_tide_height2" jdbcType="DECIMAL"/>
+            <result property="tideType" column="tide_type" jdbcType="OTHER"/>
+            <result property="dataSource" column="data_source" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,tide_date,region,
+        high_tide_time1,high_tide_height1,high_tide_time2,
+        high_tide_height2,low_tide_time1,low_tide_height1,
+        low_tide_time2,low_tide_height2,tide_type,
+        data_source,created_at,updated_at
+    </sql>
+</mapper>

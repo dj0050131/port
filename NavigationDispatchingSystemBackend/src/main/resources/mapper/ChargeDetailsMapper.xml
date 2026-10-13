@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.ChargeDetailsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.ChargeDetails">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="voucherId" column="voucher_id" jdbcType="BIGINT"/>
+            <result property="chargeDetailCode" column="charge_detail_code" jdbcType="VARCHAR"/>
+            <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+            <result property="standardChargeAmount" column="standard_charge_amount" jdbcType="DECIMAL"/>
+            <result property="actualChargeAmount" column="actual_charge_amount" jdbcType="DECIMAL"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="chargeTime" column="charge_time" jdbcType="TIMESTAMP"/>
+            <result property="chargePerson" column="charge_person" jdbcType="VARCHAR"/>
+            <result property="chargeMethod" column="charge_method" jdbcType="VARCHAR"/>
+            <result property="receiptNumber" column="receipt_number" jdbcType="VARCHAR"/>
+            <result property="discountReason" column="discount_reason" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,voucher_id,charge_detail_code,
+        item_id,standard_charge_amount,actual_charge_amount,
+        notes,charge_time,charge_person,
+        charge_method,receipt_number,discount_reason,
+        created_at,updated_at
+    </sql>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PlanTugboatAssignmentsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PlanTugboatAssignments">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="planId" column="plan_id" jdbcType="BIGINT"/>
+            <result property="tugboatId" column="tugboat_id" jdbcType="BIGINT"/>
+            <result property="assignmentType" column="assignment_type" jdbcType="VARCHAR"/>
+            <result property="estimatedStartTime" column="estimated_start_time" jdbcType="TIMESTAMP"/>
+            <result property="estimatedEndTime" column="estimated_end_time" jdbcType="TIMESTAMP"/>
+            <result property="actualStartTime" column="actual_start_time" jdbcType="TIMESTAMP"/>
+            <result property="actualEndTime" column="actual_end_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="OTHER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,plan_id,tugboat_id,assignment_type,estimated_start_time,estimated_end_time,
+        actual_start_time,actual_end_time,status,created_at,updated_at
+    </sql>
+    <insert id="insertBatch">
+        insert into plan_tugboat_assignments (plan_id, tugboat_id, assignment_type, estimated_start_time, estimated_end_time, actual_start_time, actual_end_time, status, created_at, updated_at)
+        values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.planId},#{item.tugboatId},#{item.assignmentType},#{item.estimatedStartTime},#{item.estimatedEndTime},#{item.actualStartTime},#{item.actualEndTime},#{item})
+        </foreach>
+    </insert>
+    <!-- 更新分配状态 -->
+    <update id="updateAssignmentStatus">
+        UPDATE plan_tugboat_assignments
+        SET status = #{status},
+            updated_at = NOW()
+        WHERE plan_id = #{planId}
+          AND tugboat_id = #{tugboatId}
+    </update>
+
+    <!-- 更新实际时间 -->
+    <update id="updateActualTimes">
+        UPDATE plan_tugboat_assignments
+        SET actual_start_time = #{actualStartTime},
+            actual_end_time = #{actualEndTime},
+            updated_at = NOW()
+        WHERE plan_id = #{planId}
+          AND tugboat_id = #{tugboatId}
+    </update>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.DriversMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Drivers">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="driverCode" column="driver_code" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="birthDate" column="birth_date" jdbcType="DATE"/>
+            <result property="level" column="level" jdbcType="VARCHAR"/>
+            <result property="licenseNumber" column="license_number" jdbcType="VARCHAR"/>
+            <result property="vehicleId" column="vehicle_id" jdbcType="BIGINT"/>
+            <result property="joinDate" column="join_date" jdbcType="DATE"/>
+            <result property="workExperience" column="work_experience" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="shortNumber" column="short_number" jdbcType="VARCHAR"/>
+            <result property="onDutyStatus" column="on_duty_status" jdbcType="OTHER"/>
+            <result property="emergencyContact" column="emergency_contact" jdbcType="VARCHAR"/>
+            <result property="licenseType" column="license_type" jdbcType="VARCHAR"/>
+            <result property="licenseExpiry" column="license_expiry" jdbcType="DATE"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,driver_code,name,
+          user_id,
+        email,
+        birth_date,level,license_number,
+        vehicle_id,join_date,work_experience,
+        phone,mobile,short_number,
+        on_duty_status,emergency_contact,license_type,
+        license_expiry,created_at,updated_at
+    </sql>
+</mapper>

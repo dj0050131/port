@@ -1,0 +1,20 @@
+export interface Users {
+  id: number              // 主键ID
+  userCode: string        // 用户代码
+  account: string         // 用户账号
+  userType: string        // 用户类型
+  username: string        // 用户名称
+  password: string        // 口令
+  applyTime: string       // 申请时间
+  phone: string           // 联系电话
+  email: string           // E-mail
+  currentStatus: string   // 当前状态
+  agentLevelType: string  // 代理级别类型
+  parentAgentId: number   // 所属代理主管ID
+  avatar: string          // 头像URL
+  lastLoginAt: string     // 最后登录时间
+  department: string      // 部门
+  position: string        // 职位
+  createdAt: string       // 创建时间
+  updatedAt: string       // 更新时间
+}

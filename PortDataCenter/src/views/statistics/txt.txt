@@ -1,0 +1,273 @@
+港口引航计费数据中心 - 统计评估接口文档
+====================================
+
+1. 船务安全科航行(月份)统计接口
+   - 接口路径: GET /assessment/safetyMonthly
+   - 参数: 
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - shipName: 船名
+     - date: 日期
+     - dynamicTime: 动态时间
+     - sailTime: 开航时间
+     - berthTime: 停靠时间
+     - pilot: 主引
+     - towedShip: 被引船舶
+     - dynamic: 动态
+     - waitTime: 等待时间
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+2. 船舶引航统计(月份)接口
+   - 接口路径: GET /assessment/pilotageMonthly
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+     - shipName: 船名
+     - pilot: 主引
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - routeType: 航线类型
+     - dynamic: 动态
+     - startTime: 开始时间
+     - endTime: 结束时间
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - no: 编号
+     - agent: 代理
+     - pickDropTime: 接送时间
+     - height: 净高
+     - foreignFee: 外贸费
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, pilots, tugboats, agents 表
+
+3. 船舶引航统计(汇总)接口
+   - 接口路径: GET /assessment/pilotageSummary
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - month: 月份
+     - foreign: 外轮
+     - domestic: 国轮
+     - gt250: >250m
+     - gt200_250: 200m-250m
+     - netTonnage: 净吨
+     - grossTonnage: 总吨
+     - deadWeight: 载重吨
+     - dangerous: 危险品船
+     - container: 集装箱船
+     - night: 夜航
+     - restDay: 休息日
+     - holiday: 法定节假日
+     - distance: 引航距离
+     - time: 引航时间
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels 表
+
+4. 船长统计(>250m)接口
+   - 接口路径: GET /assessment/lengthGt250
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+     - minLength: 最小船长 (默认250)
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - agent: 代理
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels 表
+
+5. 节假日引航统计接口
+   - 接口路径: GET /assessment/holiday
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - agent: 代理
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+6. 双休日引航统计接口
+   - 接口路径: GET /assessment/weekend
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - agent: 代理
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+7. 夜班统计接口
+   - 接口路径: GET /assessment/night
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - pickDropMachine: 接送机
+     - sendMachine: 送班机
+     - agent: 代理
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+8. 餐补统计接口
+   - 接口路径: GET /assessment/meal
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据: 暂无具体数据结构
+   - 数据来源: 暂无
+
+9. 特殊引航统计接口
+   - 接口路径: GET /assessment/special
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+     - shipName: 船名
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - specialOp: 特殊作业
+     - specialDesc: 特殊说明
+     - nationality: 国籍
+     - dynamic: 动态
+     - startTime: 开始时间
+     - endTime: 结束时间
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - mainPilot: 主引
+     - foreignFee: 外贸费
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+10. 破纪录统计接口
+   - 接口路径: GET /assessment/recordBreak
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - desc: 说明
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - length: 船长
+     - draft: 吃水
+     - berth: 泊位
+     - mainPilot: 主引
+   - 数据来源: pilotage_certificates, vessels, pilots 表
+
+11. 新码头靠泊统计接口
+   - 接口路径: GET /assessment/newWharf
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+   - 返回数据:
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - netTonnage: 净吨
+     - deadWeight: 载重吨
+     - length: 船长
+     - width: 船宽
+     - draft: 吃水
+     - berth: 泊位
+     - boardingTime: 登离时间
+     - boardingPlace: 登离地点
+     - tug: 拖轮
+     - mainPilot: 主引
+     - subPilot: 副引
+     - agent: 代理
+     - remarks: 备注
+   - 数据来源: pilotage_certificates, vessels, wharves 表
+
+12. 计划改变查询接口
+   - 接口路径: GET /assessment/planChange
+   - 参数:
+     - dateRange: 日期范围数组 [开始日期, 结束日期]
+     - status: 状态
+   - 返回数据:
+     - agent: 代理
+     - shipName: 中文船名
+     - englishName: 英文船名
+     - status: 状态
+     - reason: 原因
+     - nationality: 国籍
+     - dynamic: 动态
+     - timeDate: 时间/日期
+     - grossTonnage: 总吨
+     - mainPilot: 主引
+     - remarks: 备注
+   - 数据来源: pilotage_plans, vessels, agents 表

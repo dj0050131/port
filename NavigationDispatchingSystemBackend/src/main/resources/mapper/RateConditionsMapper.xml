@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.RateConditionsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.RateConditions">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="standardRateId" column="standard_rate_id" jdbcType="BIGINT"/>
+            <result property="conditionType" column="condition_type" jdbcType="VARCHAR"/>
+            <result property="conditionOperator" column="condition_operator" jdbcType="VARCHAR"/>
+            <result property="conditionValue" column="condition_value" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,standard_rate_id,condition_type,condition_operator,condition_value,description,
+        created_at,updated_at
+    </sql>
+</mapper>

@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "security.jwt",
+      "type": "syy.portPilotage.jwt.JwtProperties",
+      "sourceType": "syy.portPilotage.jwt.JwtProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "security.jwt.expiration-minutes",
+      "type": "java.lang.Long",
+      "sourceType": "syy.portPilotage.jwt.JwtProperties"
+    },
+    {
+      "name": "security.jwt.secret",
+      "type": "java.lang.String",
+      "sourceType": "syy.portPilotage.jwt.JwtProperties"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

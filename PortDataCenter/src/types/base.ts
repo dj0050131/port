@@ -1,0 +1,21 @@
+export interface Agents {
+    id: number;                    // 主键ID
+    agentCode: string;             // 代理公司代码
+    companyName: string;           // 代理公司名称
+    shortName: string;             // 代理公司简称
+    principal: string;             // 负责人
+    contactPerson: string;         // 联系人
+    phone: string;                 // 联系电话
+    address: string;               // 公司地址
+    email: string;                 // E-mail
+    creditRating: any;             // 信用等级
+    paymentStatus: any;            // 缴费状态
+    businessLicense: string;       // 营业执照号
+    registeredCapital: number;      // 注册资本
+    defaultTaxpayerId: string;     // 默认纳税人识别号
+    defaultBankName: string;       // 默认开户银行
+    defaultBankAccount: string;    // 默认银行账号
+    defaultAddress: string;        // 默认地址
+    createdAt: string;             // 创建时间
+    updatedAt: string;             // 更新时间
+}

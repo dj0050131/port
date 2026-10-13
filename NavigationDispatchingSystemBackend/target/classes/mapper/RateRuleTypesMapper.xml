@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.RateRuleTypesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.RateRuleTypes">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="ruleTypeCode" column="rule_type_code" jdbcType="VARCHAR"/>
+            <result property="ruleTypeName" column="rule_type_name" jdbcType="VARCHAR"/>
+            <result property="calculationMethod" column="calculation_method" jdbcType="OTHER"/>
+            <result property="chargeItemId" column="charge_item_id" jdbcType="BIGINT"/>
+            <result property="isSystem" column="is_system" jdbcType="TINYINT"/>
+            <result property="sortOrder" column="sort_order" jdbcType="INTEGER"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,rule_type_code,rule_type_name,calculation_method,charge_item_id,is_system,
+        sort_order,description,created_at,updated_at
+    </sql>
+</mapper>

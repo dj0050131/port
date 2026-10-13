@@ -1,0 +1,51 @@
+$primary-gradient: linear-gradient(135deg, #38bdf8, #1e40af);
+$transparent-bg: rgba(255, 255, 255, 0.15);
+$transparent-bg-dark: rgba(15, 23, 42, 0.8);
+$text-primary: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.7);
+
+@use 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #1e40af,
+      'light-1': #3b82f6,
+      'light-2': #60a5fa,
+      'light-3': #93c5fd,
+      'dark-1': #1e3a8a
+    ),
+    'secondary': (
+      'base': #7c3aed,
+      'light-1': #a78bfa,
+      'light-2': #c4b5fd,
+      'dark-1': #6d28d9
+    )
+  ),
+  $border-radius: (
+    'base': 8px,
+    'small': 4px
+  ),
+  $menu: (
+    'background-color': $transparent-bg-dark,
+    'text-color': $text-primary,
+    'active-text-color': #3b82f6
+  ),
+  $card: (
+    'background-color': $transparent-bg,
+    'border-color': rgba(255, 255, 255, 0.2),
+    'shadow': 0 4px 20px rgba(0, 0, 0, 0.1)
+  ),
+  $button: (
+    'primary-background-color': $primary-gradient,
+    'primary-hover-background-color': linear-gradient(135deg, #60a5fa, #1e3a8a),
+    'text-color': $text-primary
+  ),
+  $table: (
+    'header-text-color': $text-primary,
+    'body-text-color': $text-secondary,
+    'background-color': $transparent-bg,
+    'border-color': rgba(255, 255, 255, 0.1)
+  )
+);
+
+@use 'element-plus/theme-chalk/src/index.scss' as *;
+

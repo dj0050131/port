@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.WorkSheetsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.WorkSheets">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="worksheetCode" column="worksheet_code" jdbcType="VARCHAR"/>
+            <result property="planStartTime" column="plan_start_time" jdbcType="TIMESTAMP"/>
+            <result property="planEndTime" column="plan_end_time" jdbcType="TIMESTAMP"/>
+            <result property="startLocation" column="start_location" jdbcType="VARCHAR"/>
+            <result property="endLocation" column="end_location" jdbcType="VARCHAR"/>
+            <result property="assignedTugboats" column="assigned_tugboats" jdbcType="VARCHAR"/>
+            <result property="assignedPilotBoats" column="assigned_pilot_boats" jdbcType="VARCHAR"/>
+            <result property="assignedPilotId" column="assigned_pilot_id" jdbcType="BIGINT"/>
+            <result property="assignedDriverId" column="assigned_driver_id" jdbcType="BIGINT"/>
+            <result property="boardingTime" column="boarding_time" jdbcType="TIMESTAMP"/>
+            <result property="leavingTime" column="leaving_time" jdbcType="TIMESTAMP"/>
+            <result property="actualStartTime" column="actual_start_time" jdbcType="TIMESTAMP"/>
+            <result property="actualEndTime" column="actual_end_time" jdbcType="TIMESTAMP"/>
+            <result property="operationTypeFlag" column="operation_type_flag" jdbcType="VARCHAR"/>
+            <result property="workStatus" column="work_status" jdbcType="VARCHAR"/>
+            <result property="completionQualityScore" column="completion_quality_score" jdbcType="INTEGER"/>
+            <result property="specialSituationRecord" column="special_situation_record" jdbcType="VARCHAR"/>
+            <result property="customerFeedback" column="customer_feedback" jdbcType="VARCHAR"/>
+            <result property="workDuration" column="work_duration" jdbcType="INTEGER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,worksheet_code,plan_start_time,
+        plan_end_time,start_location,end_location,
+        assigned_tugboats,assigned_pilot_boats,assigned_pilot_id,
+        assigned_driver_id,boarding_time,leaving_time,
+        actual_start_time,actual_end_time,operation_type_flag,
+        work_status,completion_quality_score,special_situation_record,
+        customer_feedback,work_duration,created_at,
+        updated_at
+    </sql>
+</mapper>

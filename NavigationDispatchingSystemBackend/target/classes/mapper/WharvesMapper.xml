@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.WharvesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Wharves">
+            <id property="id" column="id" />
+            <result property="portAreaId" column="port_area_id" />
+            <result property="wharfCode" column="wharf_code" />
+            <result property="wharfNameZh" column="wharf_name_zh" />
+            <result property="wharfNameEn" column="wharf_name_en" />
+            <result property="wharfLength" column="wharf_length" />
+            <result property="wharfDepth" column="wharf_depth" />
+            <result property="constructionDate" column="construction_date" />
+            <result property="wharfType" column="wharf_type" />
+            <result property="operationalStatus" column="operational_status" />
+            <result property="managementCompany" column="management_company" />
+            <result property="contactPhone" column="contact_phone" />
+            <result property="longitude" column="longitude" />
+            <result property="latitude" column="latitude" />
+            <result property="createdAt" column="created_at" />
+            <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,port_area_id,wharf_code,wharf_name_zh,wharf_name_en,wharf_length,
+        wharf_depth,construction_date,wharf_type,operational_status,management_company,
+        contact_phone,longitude,latitude,created_at,updated_at
+    </sql>
+</mapper>

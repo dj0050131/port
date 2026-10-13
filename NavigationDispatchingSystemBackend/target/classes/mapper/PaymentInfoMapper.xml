@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PaymentInfoMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PaymentInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="billingVoucherId" column="billing_voucher_id" jdbcType="BIGINT"/>
+            <result property="payeeUnit" column="payee_unit" jdbcType="VARCHAR"/>
+            <result property="payeeBankAccount" column="payee_bank_account" jdbcType="VARCHAR"/>
+            <result property="payeeBankName" column="payee_bank_name" jdbcType="VARCHAR"/>
+            <result property="paymentAmount" column="payment_amount" jdbcType="DECIMAL"/>
+            <result property="paymentDate" column="payment_date" jdbcType="DATE"/>
+            <result property="paymentMethod" column="payment_method" jdbcType="VARCHAR"/>
+            <result property="paymentStatus" column="payment_status" jdbcType="OTHER"/>
+            <result property="dueDate" column="due_date" jdbcType="DATE"/>
+            <result property="actualPaymentDate" column="actual_payment_date" jdbcType="DATE"/>
+            <result property="paymentRemark" column="payment_remark" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,billing_voucher_id,payee_unit,
+        payee_bank_account,payee_bank_name,payment_amount,
+        payment_date,payment_method,payment_status,
+        due_date,actual_payment_date,payment_remark,
+        created_at,updated_at
+    </sql>
+</mapper>

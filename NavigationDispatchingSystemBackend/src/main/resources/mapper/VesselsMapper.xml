@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.VesselsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Vessels">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="vesselCallSign" column="vessel_call_sign" jdbcType="VARCHAR"/>
+            <result property="imoNumber" column="imo_number" jdbcType="VARCHAR"/>
+            <result property="mmsiNumber" column="mmsi_number" jdbcType="VARCHAR"/>
+            <result property="vesselType" column="vessel_type" jdbcType="VARCHAR"/>
+            <result property="nationality" column="nationality" jdbcType="VARCHAR"/>
+            <result property="ownerZh" column="owner_zh" jdbcType="VARCHAR"/>
+            <result property="ownerEn" column="owner_en" jdbcType="VARCHAR"/>
+            <result property="routeScope" column="route_scope" jdbcType="VARCHAR"/>
+            <result property="routeType" column="route_type" jdbcType="OTHER"/>
+            <result property="nameZh" column="name_zh" jdbcType="VARCHAR"/>
+            <result property="nameEn" column="name_en" jdbcType="VARCHAR"/>
+            <result property="vesselLength" column="vessel_length" jdbcType="DECIMAL"/>
+            <result property="vesselWidth" column="vessel_width" jdbcType="DECIMAL"/>
+            <result property="fullLoadDraft" column="full_load_draft" jdbcType="DECIMAL"/>
+            <result property="depth" column="depth" jdbcType="DECIMAL"/>
+            <result property="maxHeight" column="max_height" jdbcType="DECIMAL"/>
+            <result property="airDraft" column="air_draft" jdbcType="DECIMAL"/>
+            <result property="speed" column="speed" jdbcType="DECIMAL"/>
+            <result property="grossTonnage" column="gross_tonnage" jdbcType="DECIMAL"/>
+            <result property="netTonnage" column="net_tonnage" jdbcType="DECIMAL"/>
+            <result property="deadweight" column="deadweight" jdbcType="DECIMAL"/>
+            <result property="mainEngineType" column="main_engine_type" jdbcType="VARCHAR"/>
+            <result property="mainEnginePower" column="main_engine_power" jdbcType="DECIMAL"/>
+            <result property="bowThrusterPower" column="bow_thruster_power" jdbcType="DECIMAL"/>
+            <result property="aisPilotInterface" column="ais_pilot_interface" jdbcType="VARCHAR"/>
+            <result property="vesselColor" column="vessel_color" jdbcType="VARCHAR"/>
+            <result property="funnelColor" column="funnel_color" jdbcType="VARCHAR"/>
+            <result property="funnelMark" column="funnel_mark" jdbcType="VARCHAR"/>
+            <result property="buildDate" column="build_date" jdbcType="DATE"/>
+            <result property="blacklistRecord" column="blacklist_record" jdbcType="VARCHAR"/>
+            <result property="badStatusRecord" column="bad_status_record" jdbcType="VARCHAR"/>
+            <result property="otherAbnormalRecord" column="other_abnormal_record" jdbcType="VARCHAR"/>
+            <result property="portOfRegistry" column="port_of_registry" jdbcType="VARCHAR"/>
+            <result property="classificationSociety" column="classification_society" jdbcType="VARCHAR"/>
+            <result property="managementCompany" column="management_company" jdbcType="VARCHAR"/>
+            <result property="insuranceCompany" column="insurance_company" jdbcType="VARCHAR"/>
+            <result property="pniClub" column="pni_club" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,vessel_call_sign,imo_number,
+        mmsi_number,vessel_type,nationality,
+        owner_zh,owner_en,route_scope,
+        route_type,name_zh,name_en,
+        vessel_length,vessel_width,full_load_draft,
+        depth,max_height,air_draft,
+        speed,gross_tonnage,net_tonnage,
+        deadweight,main_engine_type,main_engine_power,
+        bow_thruster_power,ais_pilot_interface,vessel_color,
+        funnel_color,funnel_mark,build_date,
+        blacklist_record,bad_status_record,other_abnormal_record,
+        port_of_registry,classification_society,management_company,
+        insurance_company,pni_club,created_at,
+        updated_at
+    </sql>
+</mapper>

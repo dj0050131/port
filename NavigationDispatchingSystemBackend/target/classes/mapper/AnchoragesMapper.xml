@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.AnchoragesMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Anchorages">
+            <id property="id" column="id" />
+            <result property="portAreaId" column="port_area_id" />
+            <result property="anchorageCode" column="anchorage_code" />
+            <result property="anchorageNameZh" column="anchorage_name_zh" />
+            <result property="anchorageNameEn" column="anchorage_name_en" />
+            <result property="anchorageType" column="anchorage_type" />
+            <result property="capacity" column="capacity" />
+            <result property="maxDraft" column="max_draft" />
+            <result property="minDraft" column="min_draft" />
+            <result property="longitude" column="longitude" />
+            <result property="latitude" column="latitude" />
+            <result property="radius" column="radius" />
+            <result property="boundaryCoordinates" column="boundary_coordinates" />
+            <result property="tideRestriction" column="tide_restriction" />
+            <result property="weatherRestriction" column="weather_restriction" />
+            <result property="status" column="status" />
+            <result property="createdAt" column="created_at" />
+            <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,port_area_id,anchorage_code,anchorage_name_zh,anchorage_name_en,anchorage_type,
+        capacity,max_draft,min_draft,longitude,latitude,
+        radius,boundary_coordinates,tide_restriction,weather_restriction,status,
+        created_at,updated_at
+    </sql>
+</mapper>

@@ -1,0 +1,102 @@
+const { toChunks } = require("../../helpers");
+
+class AzureOpenAiEmbedder {
+  constructor() {
+    const { AzureOpenAI } = require("openai");
+    if (!process.env.AZURE_OPENAI_ENDPOINT)
+      throw new Error("No Azure API endpoint was set.");
+    if (!process.env.AZURE_OPENAI_KEY)
+      throw new Error("No Azure API key was set.");
+
+    this.className = "AzureOpenAiEmbedder";
+    this.apiVersion = "2024-12-01-preview";
+    const openai = new AzureOpenAI({
+      apiKey: process.env.AZURE_OPENAI_KEY,
+      endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+      apiVersion: this.apiVersion,
+    });
+
+    // We cannot assume the model fallback since the model is based on the deployment name
+    this.model = process.env.EMBEDDING_MODEL_PREF;
+    this.openai = openai;
+
+    // Limit of how many strings we can process in a single pass to stay with resource or network limits
+    this.maxConcurrentChunks = 16;
+
+    this.embeddingMaxChunkLength = 2048;
+  }
+
+  log(text, ...args) {
+  }
+
+  async embedTextInput(textInput) {
+    const result = await this.embedChunks(
+      Array.isArray(textInput) ? textInput : [textInput]
+    );
+    return result?.[0] || [];
+  }
+
+  async embedChunks(textChunks = []) {
+    if (!this.model) throw new Error("No Embedding Model preference defined.");
+
+    this.log(`Embedding ${textChunks.length} chunks...`);
+    const embeddingRequests = [];
+    for (const chunk of toChunks(textChunks, this.maxConcurrentChunks)) {
+      embeddingRequests.push(
+        new Promise((resolve) => {
+          this.openai.embeddings
+            .create({
+              model: this.model,
+              input: chunk,
+            })
+            .then((res) => {
+              resolve({ data: res.data, error: null });
+            })
+            .catch((e) => {
+              e.type =
+                e?.response?.data?.error?.code ||
+                e?.response?.status ||
+                "failed_to_embed";
+              e.message = e?.response?.data?.error?.message || e.message;
+              resolve({ data: [], error: e });
+            });
+        })
+      );
+    }
+
+    const { data = [], error = null } = await Promise.all(
+      embeddingRequests
+    ).then((results) => {
+      // If any errors were returned from Azure abort the entire sequence because the embeddings
+      const errors = results
+        .filter((res) => !!res.error)
+        .map((res) => res.error)
+        .flat();
+      if (errors.length > 0) {
+        let uniqueErrors = new Set();
+        errors.map((error) =>
+          uniqueErrors.add(`[${error.type}]: ${error.message}`)
+        );
+
+        return {
+          data: [],
+          error: Array.from(uniqueErrors).join(", "),
+        };
+      }
+      return {
+        data: results.map((res) => res?.data || []).flat(),
+        error: null,
+      };
+    });
+
+    if (!!error) throw new Error(`Azure OpenAI Failed to embed: ${error}`);
+    return data.length > 0 &&
+      data.every((embd) => embd.hasOwnProperty("embedding"))
+      ? data.map((embd) => embd.embedding)
+      : null;
+  }
+}
+
+module.exports = {
+  AzureOpenAiEmbedder,
+};

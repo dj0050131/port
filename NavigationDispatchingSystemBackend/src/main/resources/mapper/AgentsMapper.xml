@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.AgentsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.Agents">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="agentCode" column="agent_code" jdbcType="VARCHAR"/>
+            <result property="companyName" column="company_name" jdbcType="VARCHAR"/>
+            <result property="shortName" column="short_name" jdbcType="VARCHAR"/>
+            <result property="principal" column="principal" jdbcType="VARCHAR"/>
+            <result property="contactPerson" column="contact_person" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="creditRating" column="credit_rating" jdbcType="OTHER"/>
+            <result property="paymentStatus" column="payment_status" jdbcType="OTHER"/>
+            <result property="businessLicense" column="business_license" jdbcType="VARCHAR"/>
+            <result property="registeredCapital" column="registered_capital" jdbcType="DECIMAL"/>
+            <result property="defaultTaxpayerId" column="default_taxpayer_id" jdbcType="VARCHAR"/>
+            <result property="defaultBankName" column="default_bank_name" jdbcType="VARCHAR"/>
+            <result property="defaultBankAccount" column="default_bank_account" jdbcType="VARCHAR"/>
+            <result property="defaultAddress" column="default_address" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,agent_code,company_name,
+        short_name,principal,contact_person,
+        phone,address,email,
+        credit_rating,payment_status,business_license,
+        registered_capital,default_taxpayer_id,default_bank_name,
+        default_bank_account,default_address,created_at,
+        updated_at
+    </sql>
+</mapper>

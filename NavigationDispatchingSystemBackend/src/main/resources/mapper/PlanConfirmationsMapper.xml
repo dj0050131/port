@@ -1,0 +1,1779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PlanConfirmationsMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PlanConfirmations">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="planId" column="plan_id" jdbcType="BIGINT"/>
+            <result property="resourceType" column="resource_type" jdbcType="OTHER"/>
+            <result property="resourceId" column="resource_id" jdbcType="BIGINT"/>
+            <result property="confirmMethod" column="confirm_method" jdbcType="OTHER"/>
+            <result property="confirmedBy" column="confirmed_by" jdbcType="BIGINT"/>
+            <result property="confirmedAt" column="confirmed_at" jdbcType="TIMESTAMP"/>
+            <result property="confirmationStatus" column="confirmation_status" jdbcType="OTHER"/>
+            <result property="notes" column="notes" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,plan_id,resource_type,resource_id,confirm_method,confirmed_by,
+        confirmed_at,confirmation_status,notes,created_at
+    </sql>
+    <!-- 获取计划的确认状态统计 -->
+    <select id="getPlanConfirmationStats" resultType="map">
+        SELECT
+            COUNT(DISTINCT CASE WHEN resource_type = 'PILOT' THEN resource_id END) as pilot_count,
+            COUNT(DISTINCT CASE WHEN resource_type = 'DRIVER' THEN resource_id END) as driver_count,
+            COUNT(DISTINCT CASE WHEN resource_type = 'PILOT_BOAT' THEN resource_id END) as pilot_boat_count,
+            COUNT(DISTINCT CASE WHEN resource_type = 'TUGBOAT' THEN resource_id END) as tugboat_count,
+            COUNT(DISTINCT CASE WHEN resource_type = 'VEHICLE' THEN resource_id END) as vehicle_count,
+            SUM(CASE WHEN confirmation_status = 'CONFIRMED' THEN 1 ELSE 0 END) as confirmed_count,
+            COUNT(*) as total_count
+        FROM plan_confirmations
+        WHERE plan_id = #{planId}
+    </select>
+
+    <!-- 查询确认记录（分页） -->
+    <select id="selectConfirmationList" resultType="map">
+        SELECT
+        pc.*,
+        pp.plan_code,
+        u.username as confirmed_by_name,
+
+        CASE pc.resource_type
+        WHEN 'PILOT' THEN p.pilot_name
+        WHEN 'DRIVER' THEN d.name
+        WHEN 'PILOT_BOAT' THEN pb.boat_name
+        WHEN 'TUGBOAT' THEN t.tugboat_name
+        ELSE '整体计划'
+        END as resource_name
+
+        FROM plan_confirmations pc
+        LEFT JOIN pilotage_plans pp ON pc.plan_id = pp.id
+        LEFT JOIN users u ON pc.confirmed_by = u.id
+        LEFT JOIN pilots p ON pc.resource_type = 'PILOT' AND pc.resource_id = p.id
+        LEFT JOIN drivers d ON pc.resource_type = 'DRIVER' AND pc.resource_id = d.id
+        LEFT JOIN pilot_boats pb ON pc.resource_type = 'PILOT_BOAT' AND pc.resource_id = pb.id
+        LEFT JOIN tugboats t ON pc.resource_type = 'TUGBOAT' AND pc.resource_id = t.id
+        WHERE 1=1
+        <if test="query.planId != null">
+            AND pc.plan_id = #{query.planId}
+        </if>
+        <if test="query.planCode != null and query.planCode != ''">
+            AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+        </if>
+        <if test="query.resourceType != null and query.resourceType != ''">
+            AND pc.resource_type = #{query.resourceType}
+        </if>
+        <if test="query.confirmMethod != null and query.confirmMethod != ''">
+            AND pc.confirm_method = #{query.confirmMethod}
+        </if>
+        <if test="query.confirmationStatus != null and query.confirmationStatus != ''">
+            AND pc.confirmation_status = #{query.confirmationStatus}
+        </if>
+        <if test="query.confirmedBy != null">
+            AND pc.confirmed_by = #{query.confirmedBy}
+        </if>
+        <if test="query.startDate != null">
+            AND DATE(pc.confirmed_at) >= #{query.startDate}
+        </if>
+        <if test="query.endDate != null">
+            AND DATE(pc.confirmed_at) &lt;= #{query.endDate}
+        </if>
+        ORDER BY pc.confirmed_at DESC
+        LIMIT #{query.offset}, #{query.pageSize}
+    </select>
+
+
+    <!-- 查询确认记录总数 -->
+    <select id="selectConfirmationCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM plan_confirmations pc
+        LEFT JOIN pilotage_plans pp ON pc.plan_id = pp.id
+        WHERE 1=1
+        <if test="query.planId != null">
+            AND pc.plan_id = #{query.planId}
+        </if>
+        <if test="query.planCode != null and query.planCode != ''">
+            AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+        </if>
+        <if test="query.resourceType != null and query.resourceType != ''">
+            AND pc.resource_type = #{query.resourceType}
+        </if>
+        <if test="query.confirmMethod != null and query.confirmMethod != ''">
+            AND pc.confirm_method = #{query.confirmMethod}
+        </if>
+        <if test="query.confirmationStatus != null and query.confirmationStatus != ''">
+            AND pc.confirmation_status = #{query.confirmationStatus}
+        </if>
+        <if test="query.confirmedBy != null">
+            AND pc.confirmed_by = #{query.confirmedBy}
+        </if>
+        <if test="query.startDate != null">
+            AND DATE(pc.confirmed_at) >= #{query.startDate}
+        </if>
+        <if test="query.endDate != null">
+            AND DATE(pc.confirmed_at) &lt;= #{query.endDate}
+        </if>
+    </select>
+
+    <!-- 检查是否已确认 -->
+    <select id="existsConfirmation" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM plan_confirmations
+        WHERE plan_id = #{planId}
+          AND resource_type = #{resourceType}
+          AND resource_id = #{resourceId}
+          AND confirmation_status = 'CONFIRMED'
+    </select>
+    <!-- 查询各项资源的确认情况列表 -->
+    <select id="selectResourceConfirmationList" resultType="map">
+        SELECT *
+        FROM (
+        <choose>
+            <!-- 1. 查询引航员分配 -->
+            <when test="query.resourceType == 'PILOT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 引航员分配信息
+                pa.id as assignment_id,
+                pa.pilot_id as resource_id,
+                'PILOT' as resource_type,
+                p.pilot_name as resource_name,
+                p.pilot_code as resource_code,
+                p.phone as resource_phone,
+                p.on_duty_status as resource_status,
+                pa.role_type as assignment_type,
+                pa.estimated_start_time,
+                pa.estimated_end_time,
+                pa.status as assignment_status,
+                pa.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name_zh,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                NULL as task_type
+
+                FROM plan_pilot_assignments pa
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+
+                -- 关联引航员表
+                INNER JOIN pilots p ON pa.pilot_id = p.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = pa.plan_id
+                AND pc.resource_type = 'PILOT'
+                AND pc.resource_id = pa.pilot_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pa.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 2. 查询驾驶员分配 -->
+            <when test="query.resourceType == 'DRIVER'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 驾驶员分配信息
+                da.id as assignment_id,
+                da.driver_id as resource_id,
+                'DRIVER' as resource_type,
+                d.name as resource_name,
+                d.driver_code as resource_code,
+                d.phone as resource_phone,
+                d.on_duty_status as resource_status,
+                da.task_type as assignment_type,
+                da.estimated_start_time,
+                da.estimated_end_time,
+                da.status as assignment_status,
+                da.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                da.task_type
+
+                FROM plan_driver_assignments da
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+
+                -- 关联驾驶员表
+                INNER JOIN drivers d ON da.driver_id = d.id
+
+                -- 关联车辆表
+                LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = da.plan_id
+                AND pc.resource_type = 'DRIVER'
+                AND pc.resource_id = da.driver_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND da.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 3. 查询拖轮分配 -->
+            <when test="query.resourceType == 'TUGBOAT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 拖轮分配信息
+                ta.id as assignment_id,
+                ta.tugboat_id as resource_id,
+                'TUGBOAT' as resource_type,
+                t.tugboat_name as resource_name,
+                t.tugboat_code as resource_code,
+                NULL as resource_phone,
+                t.status as resource_status,
+                ta.assignment_type,
+                ta.estimated_start_time,
+                ta.estimated_end_time,
+                ta.status as assignment_status,
+                ta.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                t.call_sign,
+                ta.assignment_type as purpose,
+                NULL as task_type
+
+                FROM plan_tugboat_assignments ta
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON ta.plan_id = pp.id
+
+                -- 关联拖轮表
+                INNER JOIN tugboats t ON ta.tugboat_id = t.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = ta.plan_id
+                AND pc.resource_type = 'TUGBOAT'
+                AND pc.resource_id = ta.tugboat_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND ta.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 4. 查询引航艇分配 -->
+            <when test="query.resourceType == 'PILOT_BOAT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 引航艇分配信息
+                pba.id as assignment_id,
+                pba.pilot_boat_id as resource_id,
+                'PILOT_BOAT' as resource_type,
+                pb.boat_name as resource_name,
+                pb.vessel_call_sign as resource_code,
+                NULL as resource_phone,
+                pb.current_status as resource_status,
+                pba.purpose as assignment_type,
+                pba.estimated_start_time,
+                pba.estimated_end_time,
+                pba.status as assignment_status,
+                pba.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                pb.vessel_call_sign as call_sign,
+                pba.purpose,
+                NULL as task_type
+
+                FROM plan_pilot_boat_assignments pba
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON pba.plan_id = pp.id
+
+                -- 关联引航艇表
+                INNER JOIN pilot_boats pb ON pba.pilot_boat_id = pb.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = pba.plan_id
+                AND pc.resource_type = 'PILOT_BOAT'
+                AND pc.resource_id = pba.pilot_boat_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pba.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 5. 查询车辆分配 -->
+            <when test="query.resourceType == 'VEHICLE'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 车辆分配信息
+                va.id as assignment_id,
+                va.vehicle_id as resource_id,
+                'VEHICLE' as resource_type,
+                veh.license_plate as resource_name,
+                veh.vehicle_code as resource_code,
+                NULL as resource_phone,
+                veh.vehicle_status as resource_status,
+                va.purpose as assignment_type,
+                va.estimated_start_time,
+                va.estimated_end_time,
+                va.status as assignment_status,
+                va.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                va.purpose,
+                NULL as task_type
+
+                FROM plan_vehicle_assignments va
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON va.plan_id = pp.id
+
+                -- 关联车辆表
+                INNER JOIN vehicles veh ON va.vehicle_id = veh.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = va.plan_id
+                AND pc.resource_type = 'VEHICLE'
+                AND pc.resource_id = va.vehicle_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND va.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 默认情况：查询所有资源类型（保持原有UNION ALL逻辑） -->
+            <otherwise>
+                <!-- 1. 引航员分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                pa.id as assignment_id,
+                pa.pilot_id as resource_id,
+                'PILOT' as resource_type,
+                p.pilot_name as resource_name,
+                p.pilot_code as resource_code,
+                p.phone as resource_phone,
+                p.on_duty_status as resource_status,
+                pa.role_type as assignment_type,
+                pa.estimated_start_time,
+                pa.estimated_end_time,
+                pa.status as assignment_status,
+                pa.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                NULL as task_type
+                FROM plan_pilot_assignments pa
+                INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+                INNER JOIN pilots p ON pa.pilot_id = p.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pa.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 2. 驾驶员分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                da.id as assignment_id,
+                da.driver_id as resource_id,
+                'DRIVER' as resource_type,
+                d.name as resource_name,
+                d.driver_code as resource_code,
+                d.phone as resource_phone,
+                d.on_duty_status as resource_status,
+                da.task_type as assignment_type,
+                da.estimated_start_time,
+                da.estimated_end_time,
+                da.status as assignment_status,
+                da.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                da.task_type
+                FROM plan_driver_assignments da
+                INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+                INNER JOIN drivers d ON da.driver_id = d.id
+                LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND da.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 3. 拖轮分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                ta.id as assignment_id,
+                ta.tugboat_id as resource_id,
+                'TUGBOAT' as resource_type,
+                t.tugboat_name as resource_name,
+                t.tugboat_code as resource_code,
+                NULL as resource_phone,
+                t.status as resource_status,
+                ta.assignment_type,
+                ta.estimated_start_time,
+                ta.estimated_end_time,
+                ta.status as assignment_status,
+                ta.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                t.call_sign,
+                ta.assignment_type as purpose,
+                NULL as task_type
+                FROM plan_tugboat_assignments ta
+                INNER JOIN pilotage_plans pp ON ta.plan_id = pp.id
+                INNER JOIN tugboats t ON ta.tugboat_id = t.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND ta.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 4. 引航艇分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                pba.id as assignment_id,
+                pba.pilot_boat_id as resource_id,
+                'PILOT_BOAT' as resource_type,
+                pb.boat_name as resource_name,
+                pb.vessel_call_sign as resource_code,
+                NULL as resource_phone,
+                pb.current_status as resource_status,
+                pba.purpose as assignment_type,
+                pba.estimated_start_time,
+                pba.estimated_end_time,
+                pba.status as assignment_status,
+                pba.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                pb.vessel_call_sign as call_sign,
+                pba.purpose,
+                NULL as task_type
+                FROM plan_pilot_boat_assignments pba
+                INNER JOIN pilotage_plans pp ON pba.plan_id = pp.id
+                INNER JOIN pilot_boats pb ON pba.pilot_boat_id = pb.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pba.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </otherwise>
+        </choose>
+        ) combined_results
+
+        WHERE 1=1
+        <if test="query.startDate != null">
+            AND DATE(COALESCE(confirmed_at, assignment_created_at)) &gt;= DATE(#{query.startDate})
+        </if>
+        <if test="query.endDate != null">
+            AND DATE(COALESCE(confirmed_at, assignment_created_at)) &lt;= DATE(#{query.endDate})
+        </if>
+        <!-- 确认方式筛选 -->
+        <if test="query.confirmMethod != null and query.confirmMethod != ''">
+            AND confirm_method = #{query.confirmMethod}
+        </if>
+
+        <!-- 确认状态筛选 -->
+        <if test="query.confirmationStatus != null and query.confirmationStatus != ''">
+            <choose>
+                <!-- PENDING状态：确认记录为空 -->
+                <when test="query.confirmationStatus == 'PENDING'">
+                    AND confirmation_id IS NULL
+                    AND assignment_status != 'CANCELLED'
+                </when>
+                <!-- 其他状态：匹配确认状态 -->
+                <otherwise>
+                    AND confirmation_status = #{query.confirmationStatus}
+                </otherwise>
+            </choose>
+        </if>
+
+        ORDER BY assignment_created_at DESC
+
+        LIMIT #{query.offset}, #{query.pageSize}
+    </select>
+
+    <!-- 查询各项资源的确认情况总数 -->
+    <select id="selectResourceConfirmationCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM (
+        <choose>
+            <!-- 1. 查询引航员分配 -->
+            <when test="query.resourceType == 'PILOT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 引航员分配信息
+                pa.id as assignment_id,
+                pa.pilot_id as resource_id,
+                'PILOT' as resource_type,
+                p.pilot_name as resource_name,
+                p.pilot_code as resource_code,
+                p.phone as resource_phone,
+                p.on_duty_status as resource_status,
+                pa.role_type as assignment_type,
+                pa.estimated_start_time,
+                pa.estimated_end_time,
+                pa.status as assignment_status,
+                pa.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name_zh,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                NULL as task_type
+
+                FROM plan_pilot_assignments pa
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+
+                -- 关联引航员表
+                INNER JOIN pilots p ON pa.pilot_id = p.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = pa.plan_id
+                AND pc.resource_type = 'PILOT'
+                AND pc.resource_id = pa.pilot_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pa.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 2. 查询驾驶员分配 -->
+            <when test="query.resourceType == 'DRIVER'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 驾驶员分配信息
+                da.id as assignment_id,
+                da.driver_id as resource_id,
+                'DRIVER' as resource_type,
+                d.name as resource_name,
+                d.driver_code as resource_code,
+                d.phone as resource_phone,
+                d.on_duty_status as resource_status,
+                da.task_type as assignment_type,
+                da.estimated_start_time,
+                da.estimated_end_time,
+                da.status as assignment_status,
+                da.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                da.task_type
+
+                FROM plan_driver_assignments da
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+
+                -- 关联驾驶员表
+                INNER JOIN drivers d ON da.driver_id = d.id
+
+                -- 关联车辆表
+                LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = da.plan_id
+                AND pc.resource_type = 'DRIVER'
+                AND pc.resource_id = da.driver_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND da.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 3. 查询拖轮分配 -->
+            <when test="query.resourceType == 'TUGBOAT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 拖轮分配信息
+                ta.id as assignment_id,
+                ta.tugboat_id as resource_id,
+                'TUGBOAT' as resource_type,
+                t.tugboat_name as resource_name,
+                t.tugboat_code as resource_code,
+                NULL as resource_phone,
+                t.status as resource_status,
+                ta.assignment_type,
+                ta.estimated_start_time,
+                ta.estimated_end_time,
+                ta.status as assignment_status,
+                ta.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                t.call_sign,
+                ta.assignment_type as purpose,
+                NULL as task_type
+
+                FROM plan_tugboat_assignments ta
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON ta.plan_id = pp.id
+
+                -- 关联拖轮表
+                INNER JOIN tugboats t ON ta.tugboat_id = t.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = ta.plan_id
+                AND pc.resource_type = 'TUGBOAT'
+                AND pc.resource_id = ta.tugboat_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND ta.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 4. 查询引航艇分配 -->
+            <when test="query.resourceType == 'PILOT_BOAT'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 引航艇分配信息
+                pba.id as assignment_id,
+                pba.pilot_boat_id as resource_id,
+                'PILOT_BOAT' as resource_type,
+                pb.boat_name as resource_name,
+                pb.vessel_call_sign as resource_code,
+                NULL as resource_phone,
+                pb.current_status as resource_status,
+                pba.purpose as assignment_type,
+                pba.estimated_start_time,
+                pba.estimated_end_time,
+                pba.status as assignment_status,
+                pba.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                NULL as license_plate,
+                NULL as vehicle_model,
+                pb.vessel_call_sign as call_sign,
+                pba.purpose,
+                NULL as task_type
+
+                FROM plan_pilot_boat_assignments pba
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON pba.plan_id = pp.id
+
+                -- 关联引航艇表
+                INNER JOIN pilot_boats pb ON pba.pilot_boat_id = pb.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = pba.plan_id
+                AND pc.resource_type = 'PILOT_BOAT'
+                AND pc.resource_id = pba.pilot_boat_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pba.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 5. 查询车辆分配 -->
+            <when test="query.resourceType == 'VEHICLE'">
+                SELECT
+                -- 计划信息
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_status,
+                pp.plan_start_time,
+                pp.plan_end_time,
+
+                -- 车辆分配信息
+                va.id as assignment_id,
+                va.vehicle_id as resource_id,
+                'VEHICLE' as resource_type,
+                veh.license_plate as resource_name,
+                veh.vehicle_code as resource_code,
+                NULL as resource_phone,
+                veh.vehicle_status as resource_status,
+                va.purpose as assignment_type,
+                va.estimated_start_time,
+                va.estimated_end_time,
+                va.status as assignment_status,
+                va.created_at as assignment_created_at,
+
+                -- 确认记录信息
+                pc.id as confirmation_id,
+                pc.confirm_method,
+                pc.confirmation_status,
+                pc.confirmed_by,
+                pc.confirmed_at,
+                pc.notes as confirmation_notes,
+
+                -- 确认人信息
+                u.username as confirmed_by_name,
+
+                -- 船舶信息
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+
+                -- 航次信息
+                voy.voyage_number,
+                voy.voyage_type,
+
+                -- 额外字段
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                va.purpose,
+                NULL as task_type
+
+                FROM plan_vehicle_assignments va
+
+                -- 关联计划表
+                INNER JOIN pilotage_plans pp ON va.plan_id = pp.id
+
+                -- 关联车辆表
+                INNER JOIN vehicles veh ON va.vehicle_id = veh.id
+
+                -- 左连接确认记录表
+                LEFT JOIN plan_confirmations pc ON pc.plan_id = va.plan_id
+                AND pc.resource_type = 'VEHICLE'
+                AND pc.resource_id = va.vehicle_id
+
+                -- 左连接确认人用户表
+                LEFT JOIN users u ON pc.confirmed_by = u.id
+
+                -- 关联船舶表
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+
+                -- 关联航次表
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND va.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </when>
+
+            <!-- 默认情况：查询所有资源类型（保持原有UNION ALL逻辑） -->
+            <otherwise>
+                <!-- 1. 引航员分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                pa.id as assignment_id,
+                pa.pilot_id as resource_id,
+                'PILOT' as resource_type,
+                p.pilot_name as resource_name,
+                p.pilot_code as resource_code,
+                p.phone as resource_phone,
+                p.on_duty_status as resource_status,
+                pa.role_type as assignment_type,
+                pa.estimated_start_time,
+                pa.estimated_end_time,
+                pa.status as assignment_status,
+                pa.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                NULL as task_type
+                FROM plan_pilot_assignments pa
+                INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+                INNER JOIN pilots p ON pa.pilot_id = p.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pa.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 2. 驾驶员分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                da.id as assignment_id,
+                da.driver_id as resource_id,
+                'DRIVER' as resource_type,
+                d.name as resource_name,
+                d.driver_code as resource_code,
+                d.phone as resource_phone,
+                d.on_duty_status as resource_status,
+                da.task_type as assignment_type,
+                da.estimated_start_time,
+                da.estimated_end_time,
+                da.status as assignment_status,
+                da.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                veh.license_plate,
+                veh.vehicle_model,
+                NULL as call_sign,
+                NULL as purpose,
+                da.task_type
+                FROM plan_driver_assignments da
+                INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+                INNER JOIN drivers d ON da.driver_id = d.id
+                LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND da.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 3. 拖轮分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                ta.id as assignment_id,
+                ta.tugboat_id as resource_id,
+                'TUGBOAT' as resource_type,
+                t.tugboat_name as resource_name,
+                t.tugboat_code as resource_code,
+                NULL as resource_phone,
+                t.status as resource_status,
+                ta.assignment_type,
+                ta.estimated_start_time,
+                ta.estimated_end_time,
+                ta.status as assignment_status,
+                ta.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                t.call_sign,
+                ta.assignment_type as purpose,
+                NULL as task_type
+                FROM plan_tugboat_assignments ta
+                INNER JOIN pilotage_plans pp ON ta.plan_id = pp.id
+                INNER JOIN tugboats t ON ta.tugboat_id = t.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND ta.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+
+                UNION ALL
+
+                <!-- 4. 引航艇分配 -->
+                SELECT
+                pp.id as plan_id,
+                pp.plan_code,
+                pp.plan_start_time,
+                pp.plan_end_time,
+                pba.id as assignment_id,
+                pba.pilot_boat_id as resource_id,
+                'PILOT_BOAT' as resource_type,
+                pb.boat_name as resource_name,
+                pb.vessel_call_sign as resource_code,
+                NULL as resource_phone,
+                pb.current_status as resource_status,
+                pba.purpose as assignment_type,
+                pba.estimated_start_time,
+                pba.estimated_end_time,
+                pba.status as assignment_status,
+                pba.created_at as assignment_created_at,
+                NULL as confirmation_id,
+                NULL as confirm_method,
+                NULL as confirmation_status,
+                NULL as confirmed_by,
+                NULL as confirmed_at,
+                NULL as confirmation_notes,
+                NULL as confirmed_by_name,
+                v.name_zh as vessel_name,
+                v.name_en as vessel_name_en,
+                v.vessel_call_sign,
+                voy.voyage_number,
+                voy.voyage_type,
+                NULL as license_plate,
+                NULL as vehicle_model,
+                pb.vessel_call_sign as call_sign,
+                pba.purpose,
+                NULL as task_type
+                FROM plan_pilot_boat_assignments pba
+                INNER JOIN pilotage_plans pp ON pba.plan_id = pp.id
+                INNER JOIN pilot_boats pb ON pba.pilot_boat_id = pb.id
+                LEFT JOIN vessels v ON pp.vessel_id = v.id
+                LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+                WHERE 1=1
+                <if test="query.planId != null">
+                    AND pba.plan_id = #{query.planId}
+                </if>
+                <if test="query.planCode != null and query.planCode != ''">
+                    AND pp.plan_code LIKE CONCAT('%', #{query.planCode}, '%')
+                </if>
+            </otherwise>
+        </choose>
+        ) combined_results
+
+        WHERE 1=1
+        <if test="query.startDate != null">
+            AND DATE(COALESCE(confirmed_at, assignment_created_at)) &gt;= DATE(#{query.startDate})
+        </if>
+        <if test="query.endDate != null">
+            AND DATE(COALESCE(confirmed_at, assignment_created_at)) &lt;= DATE(#{query.endDate})
+        </if>
+        <!-- 确认方式筛选 -->
+        <if test="query.confirmMethod != null and query.confirmMethod != ''">
+            AND confirm_method = #{query.confirmMethod}
+        </if>
+
+        <!-- 确认状态筛选 -->
+        <if test="query.confirmationStatus != null and query.confirmationStatus != ''">
+            <choose>
+                <!-- PENDING状态：确认记录为空 -->
+                <when test="query.confirmationStatus == 'PENDING'">
+                    AND confirmation_id IS NULL
+                    AND assignment_status != 'CANCELLED'
+                </when>
+                <!-- 其他状态：匹配确认状态 -->
+                <otherwise>
+                    AND confirmation_status = #{query.confirmationStatus}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 获取计划的资源确认统计（按类型分组） -->
+    <select id="selectPlanConfirmationStats" resultType="map">
+        SELECT
+            resource_type,
+            COUNT(*) as total_count,
+            SUM(CASE WHEN confirmation_status = 'CONFIRMED' THEN 1 ELSE 0 END) as confirmed_count,
+            SUM(CASE WHEN confirmation_status = 'PENDING' THEN 1 ELSE 0 END) as pending_count,
+            SUM(CASE WHEN confirmation_status = 'REJECTED' THEN 1 ELSE 0 END) as rejected_count,
+            SUM(CASE WHEN confirmation_status = 'CANCELLED' THEN 1 ELSE 0 END) as cancelled_count
+        FROM plan_confirmations
+        WHERE plan_id = #{planId}
+        GROUP BY resource_type
+    </select>
+
+    <!-- 查询引航员任务列表 -->
+    <select id="selectPilotTasks" resultType="map">
+        SELECT
+        -- 计划信息
+        pp.id as plan_id,
+        pp.plan_code,
+        pp.plan_start_time,
+        pp.plan_end_time,
+        pp.plan_status,
+
+        -- 引航员分配信息
+        pa.id as assignment_id,
+        pa.pilot_id as resource_id,
+        'PILOT' as resource_type,
+        p.pilot_name as resource_name,
+        p.pilot_code as resource_code,
+        p.phone as resource_phone,
+        p.on_duty_status as resource_status,
+        pa.role_type as assignment_type,
+        pa.estimated_start_time,
+        pa.estimated_end_time,
+        pa.status as assignment_status,
+        pa.created_at as assignment_created_at,
+
+        -- 确认记录信息
+        pc.id as confirmation_id,
+        pc.confirm_method,
+        pc.confirmation_status,
+        pc.confirmed_by,
+        pc.confirmed_at,
+        pc.notes as confirmation_notes,
+
+        -- 确认人信息
+        u.username as confirmed_by_name,
+
+        -- 船舶信息
+        v.name_zh as vessel_name,
+        v.name_en as vessel_name_en,
+        v.vessel_call_sign,
+
+        -- 航次信息
+        voy.voyage_number,
+        voy.voyage_type,
+
+        -- 额外字段
+        NULL as license_plate,
+        NULL as vehicle_model,
+        NULL as call_sign,
+        NULL as purpose,
+        NULL as task_type
+
+        FROM plan_pilot_assignments pa
+        INNER JOIN pilots p ON pa.pilot_id = p.id
+        INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = pa.plan_id
+            AND pc.resource_type = 'PILOT'
+            AND pc.resource_id = pa.pilot_id
+        LEFT JOIN users u ON pc.confirmed_by = u.id
+        LEFT JOIN vessels v ON pp.vessel_id = v.id
+        LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+        WHERE pa.pilot_id = #{pilotId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 'PENDING'">
+                    AND (pc.id IS NULL OR pc.confirmation_status != 'CONFIRMED')
+                    AND pa.status != 'CANCELLED'
+                </when>
+                <otherwise>
+                    AND pa.status = #{status}
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY pa.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询引航员任务总数 -->
+    <select id="selectPilotTasksCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM plan_pilot_assignments pa
+        INNER JOIN pilots p ON pa.pilot_id = p.id
+        INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = pa.plan_id
+            AND pc.resource_type = 'PILOT'
+            AND pc.resource_id = pa.pilot_id
+        WHERE pa.pilot_id = #{pilotId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 'PENDING'">
+                    AND (pc.id IS NULL OR pc.confirmation_status != 'CONFIRMED')
+                    AND pa.status != 'CANCELLED'
+                </when>
+                <otherwise>
+                    AND pa.status = #{status}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 查询驾驶员任务列表 -->
+    <select id="selectDriverTasks" resultType="map">
+        SELECT
+        -- 计划信息
+        pp.id as plan_id,
+        pp.plan_code,
+        pp.plan_start_time,
+        pp.plan_end_time,
+        pp.plan_status,
+
+        -- 驾驶员分配信息
+        da.id as assignment_id,
+        da.driver_id as resource_id,
+        'DRIVER' as resource_type,
+        d.name as resource_name,
+        d.driver_code as resource_code,
+        d.phone as resource_phone,
+        d.on_duty_status as resource_status,
+        da.task_type as assignment_type,
+        da.estimated_start_time,
+        da.estimated_end_time,
+        da.status as assignment_status,
+        da.created_at as assignment_created_at,
+
+        -- 确认记录信息
+        pc.id as confirmation_id,
+        pc.confirm_method,
+        pc.confirmation_status,
+        pc.confirmed_by,
+        pc.confirmed_at,
+        pc.notes as confirmation_notes,
+
+        -- 确认人信息
+        u.username as confirmed_by_name,
+
+        -- 船舶信息
+        v.name_zh as vessel_name,
+        v.name_en as vessel_name_en,
+        v.vessel_call_sign,
+
+        -- 航次信息
+        voy.voyage_number,
+        voy.voyage_type,
+
+        -- 额外字段
+        veh.license_plate,
+        veh.vehicle_model,
+        NULL as call_sign,
+        da.task_type as purpose,
+        da.task_type
+
+        FROM plan_driver_assignments da
+        INNER JOIN drivers d ON da.driver_id = d.id
+        INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = da.plan_id
+            AND pc.resource_type = 'DRIVER'
+            AND pc.resource_id = da.driver_id
+        LEFT JOIN users u ON pc.confirmed_by = u.id
+        LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+        LEFT JOIN vessels v ON pp.vessel_id = v.id
+        LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+        WHERE da.driver_id = #{driverId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 'PENDING'">
+                    AND (pc.id IS NULL OR pc.confirmation_status != 'CONFIRMED')
+                    AND da.status != 'CANCELLED'
+                </when>
+                <otherwise>
+                    AND da.status = #{status}
+                </otherwise>
+            </choose>
+        </if>
+        ORDER BY da.created_at DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <!-- 查询驾驶员任务总数 -->
+    <select id="selectDriverTasksCount" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM plan_driver_assignments da
+        INNER JOIN drivers d ON da.driver_id = d.id
+        INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = da.plan_id
+            AND pc.resource_type = 'DRIVER'
+            AND pc.resource_id = da.driver_id
+        WHERE da.driver_id = #{driverId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+        <if test="status != null and status != ''">
+            <choose>
+                <when test="status == 'PENDING'">
+                    AND (pc.id IS NULL OR pc.confirmation_status != 'CONFIRMED')
+                    AND da.status != 'CANCELLED'
+                </when>
+                <otherwise>
+                    AND da.status = #{status}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!-- 根据分配ID查询引航员任务详情 -->
+    <select id="selectPilotTaskById" resultType="map">
+        SELECT
+        -- 计划信息
+        pp.id as plan_id,
+        pp.plan_code,
+        pp.plan_start_time,
+        pp.plan_end_time,
+        pp.plan_status,
+
+        -- 引航员分配信息
+        pa.id as assignment_id,
+        pa.pilot_id as resource_id,
+        'PILOT' as resource_type,
+        p.pilot_name as resource_name,
+        p.pilot_code as resource_code,
+        p.phone as resource_phone,
+        p.on_duty_status as resource_status,
+        pa.role_type as assignment_type,
+        pa.estimated_start_time,
+        pa.estimated_end_time,
+        pa.status as assignment_status,
+        pa.created_at as assignment_created_at,
+
+        -- 确认记录信息
+        pc.id as confirmation_id,
+        pc.confirm_method,
+        pc.confirmation_status,
+        pc.confirmed_by,
+        pc.confirmed_at,
+        pc.notes as confirmation_notes,
+
+        -- 确认人信息
+        u.username as confirmed_by_name,
+
+        -- 船舶信息
+        v.name_zh as vessel_name,
+        v.name_en as vessel_name_en,
+        v.vessel_call_sign,
+
+        -- 航次信息
+        voy.voyage_number,
+        voy.voyage_type,
+
+        -- 额外字段
+        NULL as license_plate,
+        NULL as vehicle_model,
+        NULL as call_sign,
+        NULL as purpose,
+        NULL as task_type
+
+        FROM plan_pilot_assignments pa
+        INNER JOIN pilots p ON pa.pilot_id = p.id
+        INNER JOIN pilotage_plans pp ON pa.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = pa.plan_id
+            AND pc.resource_type = 'PILOT'
+            AND pc.resource_id = pa.pilot_id
+        LEFT JOIN users u ON pc.confirmed_by = u.id
+        LEFT JOIN vessels v ON pp.vessel_id = v.id
+        LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+        WHERE pa.pilot_id = #{pilotId}
+        AND pa.id = #{assignmentId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+    </select>
+
+    <!-- 根据分配ID查询驾驶员任务详情 -->
+    <select id="selectDriverTaskById" resultType="map">
+        SELECT
+        -- 计划信息
+        pp.id as plan_id,
+        pp.plan_code,
+        pp.plan_start_time,
+        pp.plan_end_time,
+        pp.plan_status,
+
+        -- 驾驶员分配信息
+        da.id as assignment_id,
+        da.driver_id as resource_id,
+        'DRIVER' as resource_type,
+        d.name as resource_name,
+        d.driver_code as resource_code,
+        d.phone as resource_phone,
+        d.on_duty_status as resource_status,
+        da.task_type as assignment_type,
+        da.estimated_start_time,
+        da.estimated_end_time,
+        da.status as assignment_status,
+        da.created_at as assignment_created_at,
+
+        -- 确认记录信息
+        pc.id as confirmation_id,
+        pc.confirm_method,
+        pc.confirmation_status,
+        pc.confirmed_by,
+        pc.confirmed_at,
+        pc.notes as confirmation_notes,
+
+        -- 确认人信息
+        u.username as confirmed_by_name,
+
+        -- 船舶信息
+        v.name_zh as vessel_name,
+        v.name_en as vessel_name_en,
+        v.vessel_call_sign,
+
+        -- 航次信息
+        voy.voyage_number,
+        voy.voyage_type,
+
+        -- 额外字段
+        veh.license_plate,
+        veh.vehicle_model,
+        NULL as call_sign,
+        da.task_type as purpose,
+        da.task_type
+
+        FROM plan_driver_assignments da
+        INNER JOIN drivers d ON da.driver_id = d.id
+        INNER JOIN pilotage_plans pp ON da.plan_id = pp.id
+        LEFT JOIN plan_confirmations pc ON pc.plan_id = da.plan_id
+            AND pc.resource_type = 'DRIVER'
+            AND pc.resource_id = da.driver_id
+        LEFT JOIN users u ON pc.confirmed_by = u.id
+        LEFT JOIN vehicles veh ON d.vehicle_id = veh.id
+        LEFT JOIN vessels v ON pp.vessel_id = v.id
+        LEFT JOIN voyages voy ON pp.voyage_id = voy.id
+        WHERE da.driver_id = #{driverId}
+        AND da.id = #{assignmentId}
+        AND pp.plan_status IN ('PUBLISHED','CONFIRMED','ONGOING','COMPLETED','CERTIFICATED','BILLED','PAID')
+    </select>
+</mapper>

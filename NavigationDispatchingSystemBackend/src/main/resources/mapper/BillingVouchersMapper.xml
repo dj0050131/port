@@ -1,0 +1,1733 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.BillingVouchersMapper">
+  <resultMap id="BaseResultMap" type="syy.portPilotage.entity.BillingVouchers">
+    <!--@mbg.generated-->
+    <!--@Table port_pilotage.billing_vouchers-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="voucher_code" jdbcType="VARCHAR" property="voucherCode" />
+    <result column="fiscal_year" jdbcType="VARCHAR" property="fiscalYear" />
+    <result column="fiscal_period" jdbcType="VARCHAR" property="fiscalPeriod" />
+    <result column="certificate_id" jdbcType="BIGINT" property="certificateId" />
+    <result column="voyage_id" jdbcType="BIGINT" property="voyageId" />
+    <result column="vessel_id" jdbcType="BIGINT" property="vesselId" />
+    <result column="agent_id" jdbcType="BIGINT" property="agentId" />
+    <result column="start_berth_id" jdbcType="BIGINT" property="startBerthId" />
+    <result column="end_berth_id" jdbcType="BIGINT" property="endBerthId" />
+    <result column="billing_method" jdbcType="VARCHAR" property="billingMethod" />
+    <result column="charge_code" jdbcType="VARCHAR" property="chargeCode" />
+    <result column="charge_type" jdbcType="VARCHAR" property="chargeType" />
+    <result column="pilotage_start_time" jdbcType="TIMESTAMP" property="pilotageStartTime" />
+    <result column="pilotage_end_time" jdbcType="TIMESTAMP" property="pilotageEndTime" />
+    <result column="route_type" jdbcType="VARCHAR" property="routeType" />
+    <result column="standard_rate2" jdbcType="DECIMAL" property="standardRate2" />
+    <result column="standard_rate3" jdbcType="DECIMAL" property="standardRate3" />
+    <result column="actual_standard_rate2" jdbcType="DECIMAL" property="actualStandardRate2" />
+    <result column="actual_standard_rate3" jdbcType="DECIMAL" property="actualStandardRate3" />
+    <result column="actual_billing_rate2" jdbcType="DECIMAL" property="actualBillingRate2" />
+    <result column="actual_billing_rate3" jdbcType="DECIMAL" property="actualBillingRate3" />
+    <result column="cancellation_notes" jdbcType="LONGVARCHAR" property="cancellationNotes" />
+    <result column="free_charge_flag" jdbcType="VARCHAR" property="freeChargeFlag" />
+    <result column="rounding_method" jdbcType="VARCHAR" property="roundingMethod" />
+    <result column="policy_discount_reference" jdbcType="DECIMAL" property="policyDiscountReference" />
+    <result column="tax_invoicing_flag" jdbcType="VARCHAR" property="taxInvoicingFlag" />
+    <result column="tax_invoicing_time" jdbcType="TIMESTAMP" property="taxInvoicingTime" />
+    <result column="taxpayer_full_name" jdbcType="VARCHAR" property="taxpayerFullName" />
+    <result column="taxpayer_id" jdbcType="VARCHAR" property="taxpayerId" />
+    <result column="invoice_code" jdbcType="VARCHAR" property="invoiceCode" />
+    <result column="invoice_number" jdbcType="VARCHAR" property="invoiceNumber" />
+    <result column="buyer_bank" jdbcType="VARCHAR" property="buyerBank" />
+    <result column="total_amount" jdbcType="DECIMAL" property="totalAmount" />
+    <result column="audit_status" jdbcType="OTHER" property="auditStatus" />
+    <result column="payment_status" jdbcType="OTHER" property="paymentStatus" />
+    <result column="transfer_status" jdbcType="OTHER" property="transferStatus" />
+    <result column="due_date" jdbcType="DATE" property="dueDate" />
+    <result column="discount_amount" jdbcType="DECIMAL" property="discountAmount" />
+    <result column="late_fee" jdbcType="DECIMAL" property="lateFee" />
+    <result column="actual_received_amount" jdbcType="DECIMAL" property="actualReceivedAmount" />
+    <result column="receipt_date" jdbcType="DATE" property="receiptDate" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="createdAt" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt" />
+    <result column="transfer_target" jdbcType="VARCHAR" property="transferTarget" />
+    <result column="transfer_type" jdbcType="OTHER" property="transferType" />
+    <result column="transfer_batch_no" jdbcType="VARCHAR" property="transferBatchNo" />
+    <result column="transfer_time" jdbcType="TIMESTAMP" property="transferTime" />
+    <result column="transfer_operator_id" jdbcType="BIGINT" property="transferOperatorId" />
+    <result column="transfer_notes" jdbcType="LONGVARCHAR" property="transferNotes" />
+    <result column="external_ref_no" jdbcType="VARCHAR" property="externalRefNo" />
+    <result column="external_response_code" jdbcType="VARCHAR" property="externalResponseCode" />
+    <result column="external_response_msg" jdbcType="LONGVARCHAR" property="externalResponseMsg" />
+    <result column="last_transfer_attempt" jdbcType="TIMESTAMP" property="lastTransferAttempt" />
+    <result column="transfer_attempt_count" jdbcType="INTEGER" property="transferAttemptCount" />
+    <result column="next_retry_time" jdbcType="TIMESTAMP" property="nextRetryTime" />
+    <result column="electronic_invoice_status" jdbcType="OTHER" property="electronicInvoiceStatus" />
+    <result column="electronic_generated_at" jdbcType="TIMESTAMP" property="electronicGeneratedAt" />
+    <result column="electronic_generated_by" jdbcType="BIGINT" property="electronicGeneratedBy" />
+    <result column="electronic_sent_at" jdbcType="TIMESTAMP" property="electronicSentAt" />
+    <result column="electronic_sent_by" jdbcType="BIGINT" property="electronicSentBy" />
+    <result column="electronic_sent_to" jdbcType="VARCHAR" property="electronicSentTo" />
+    <result column="check_code" jdbcType="VARCHAR" property="checkCode" />
+    <result column="invoice_notes" jdbcType="LONGVARCHAR" property="invoiceNotes" />
+    <result column="download_count" jdbcType="INTEGER" property="downloadCount" />
+    <result column="last_download_at" jdbcType="TIMESTAMP" property="lastDownloadAt" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, voucher_code, fiscal_year, fiscal_period, certificate_id, voyage_id, vessel_id, 
+    agent_id, start_berth_id, end_berth_id, billing_method, charge_code, charge_type, 
+    pilotage_start_time, pilotage_end_time, route_type, standard_rate2, standard_rate3, 
+    actual_standard_rate2, actual_standard_rate3, actual_billing_rate2, actual_billing_rate3, 
+    cancellation_notes, free_charge_flag, rounding_method, policy_discount_reference, 
+    tax_invoicing_flag, tax_invoicing_time, taxpayer_full_name, taxpayer_id, invoice_code, 
+    invoice_number, buyer_bank, total_amount, audit_status, payment_status, transfer_status, 
+    due_date, discount_amount, late_fee, actual_received_amount, receipt_date, created_at, 
+    updated_at, transfer_target, transfer_type, transfer_batch_no, transfer_time, transfer_operator_id, 
+    transfer_notes, external_ref_no, external_response_code, external_response_msg, last_transfer_attempt, 
+    transfer_attempt_count, next_retry_time, electronic_invoice_status, electronic_generated_at, 
+    electronic_generated_by, electronic_sent_at, electronic_sent_by, electronic_sent_to, 
+    check_code, invoice_notes, download_count, last_download_at
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from port_pilotage.billing_vouchers
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from port_pilotage.billing_vouchers
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.BillingVouchers" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.billing_vouchers (voucher_code, fiscal_year, fiscal_period, 
+      certificate_id, voyage_id, vessel_id, 
+      agent_id, start_berth_id, end_berth_id, 
+      billing_method, charge_code, charge_type, 
+      pilotage_start_time, pilotage_end_time, 
+      route_type, standard_rate2, standard_rate3, 
+      actual_standard_rate2, actual_standard_rate3, 
+      actual_billing_rate2, actual_billing_rate3, 
+      cancellation_notes, free_charge_flag, 
+      rounding_method, policy_discount_reference, 
+      tax_invoicing_flag, tax_invoicing_time, taxpayer_full_name, 
+      taxpayer_id, invoice_code, invoice_number, 
+      buyer_bank, total_amount, audit_status, 
+      payment_status, transfer_status, due_date, 
+      discount_amount, late_fee, actual_received_amount, 
+      receipt_date, created_at, updated_at, 
+      transfer_target, transfer_type, transfer_batch_no, 
+      transfer_time, transfer_operator_id, transfer_notes, 
+      external_ref_no, external_response_code, external_response_msg, 
+      last_transfer_attempt, transfer_attempt_count, 
+      next_retry_time, electronic_invoice_status, 
+      electronic_generated_at, electronic_generated_by, 
+      electronic_sent_at, electronic_sent_by, electronic_sent_to, 
+      check_code, invoice_notes, download_count, 
+      last_download_at)
+    values (#{voucherCode,jdbcType=VARCHAR}, #{fiscalYear,jdbcType=VARCHAR}, #{fiscalPeriod,jdbcType=VARCHAR}, 
+      #{certificateId,jdbcType=BIGINT}, #{voyageId,jdbcType=BIGINT}, #{vesselId,jdbcType=BIGINT}, 
+      #{agentId,jdbcType=BIGINT}, #{startBerthId,jdbcType=BIGINT}, #{endBerthId,jdbcType=BIGINT}, 
+      #{billingMethod,jdbcType=VARCHAR}, #{chargeCode,jdbcType=VARCHAR}, #{chargeType,jdbcType=VARCHAR}, 
+      #{pilotageStartTime,jdbcType=TIMESTAMP}, #{pilotageEndTime,jdbcType=TIMESTAMP}, 
+      #{routeType,jdbcType=VARCHAR}, #{standardRate2,jdbcType=DECIMAL}, #{standardRate3,jdbcType=DECIMAL}, 
+      #{actualStandardRate2,jdbcType=DECIMAL}, #{actualStandardRate3,jdbcType=DECIMAL}, 
+      #{actualBillingRate2,jdbcType=DECIMAL}, #{actualBillingRate3,jdbcType=DECIMAL}, 
+      #{cancellationNotes,jdbcType=LONGVARCHAR}, #{freeChargeFlag,jdbcType=VARCHAR}, 
+      #{roundingMethod,jdbcType=VARCHAR}, #{policyDiscountReference,jdbcType=DECIMAL}, 
+      #{taxInvoicingFlag,jdbcType=VARCHAR}, #{taxInvoicingTime,jdbcType=TIMESTAMP}, #{taxpayerFullName,jdbcType=VARCHAR}, 
+      #{taxpayerId,jdbcType=VARCHAR}, #{invoiceCode,jdbcType=VARCHAR}, #{invoiceNumber,jdbcType=VARCHAR}, 
+      #{buyerBank,jdbcType=VARCHAR}, #{totalAmount,jdbcType=DECIMAL}, #{auditStatus,jdbcType=OTHER}, 
+      #{paymentStatus,jdbcType=OTHER}, #{transferStatus,jdbcType=OTHER}, #{dueDate,jdbcType=DATE}, 
+      #{discountAmount,jdbcType=DECIMAL}, #{lateFee,jdbcType=DECIMAL}, #{actualReceivedAmount,jdbcType=DECIMAL}, 
+      #{receiptDate,jdbcType=DATE}, #{createdAt,jdbcType=TIMESTAMP}, #{updatedAt,jdbcType=TIMESTAMP}, 
+      #{transferTarget,jdbcType=VARCHAR}, #{transferType,jdbcType=OTHER}, #{transferBatchNo,jdbcType=VARCHAR}, 
+      #{transferTime,jdbcType=TIMESTAMP}, #{transferOperatorId,jdbcType=BIGINT}, #{transferNotes,jdbcType=LONGVARCHAR}, 
+      #{externalRefNo,jdbcType=VARCHAR}, #{externalResponseCode,jdbcType=VARCHAR}, #{externalResponseMsg,jdbcType=LONGVARCHAR}, 
+      #{lastTransferAttempt,jdbcType=TIMESTAMP}, #{transferAttemptCount,jdbcType=INTEGER}, 
+      #{nextRetryTime,jdbcType=TIMESTAMP}, #{electronicInvoiceStatus,jdbcType=OTHER}, 
+      #{electronicGeneratedAt,jdbcType=TIMESTAMP}, #{electronicGeneratedBy,jdbcType=BIGINT}, 
+      #{electronicSentAt,jdbcType=TIMESTAMP}, #{electronicSentBy,jdbcType=BIGINT}, #{electronicSentTo,jdbcType=VARCHAR}, 
+      #{checkCode,jdbcType=VARCHAR}, #{invoiceNotes,jdbcType=LONGVARCHAR}, #{downloadCount,jdbcType=INTEGER}, 
+      #{lastDownloadAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="syy.portPilotage.entity.BillingVouchers" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.billing_vouchers
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="voucherCode != null">
+        voucher_code,
+      </if>
+      <if test="fiscalYear != null">
+        fiscal_year,
+      </if>
+      <if test="fiscalPeriod != null">
+        fiscal_period,
+      </if>
+      <if test="certificateId != null">
+        certificate_id,
+      </if>
+      <if test="voyageId != null">
+        voyage_id,
+      </if>
+      <if test="vesselId != null">
+        vessel_id,
+      </if>
+      <if test="agentId != null">
+        agent_id,
+      </if>
+      <if test="startBerthId != null">
+        start_berth_id,
+      </if>
+      <if test="endBerthId != null">
+        end_berth_id,
+      </if>
+      <if test="billingMethod != null">
+        billing_method,
+      </if>
+      <if test="chargeCode != null">
+        charge_code,
+      </if>
+      <if test="chargeType != null">
+        charge_type,
+      </if>
+      <if test="pilotageStartTime != null">
+        pilotage_start_time,
+      </if>
+      <if test="pilotageEndTime != null">
+        pilotage_end_time,
+      </if>
+      <if test="routeType != null">
+        route_type,
+      </if>
+      <if test="standardRate2 != null">
+        standard_rate2,
+      </if>
+      <if test="standardRate3 != null">
+        standard_rate3,
+      </if>
+      <if test="actualStandardRate2 != null">
+        actual_standard_rate2,
+      </if>
+      <if test="actualStandardRate3 != null">
+        actual_standard_rate3,
+      </if>
+      <if test="actualBillingRate2 != null">
+        actual_billing_rate2,
+      </if>
+      <if test="actualBillingRate3 != null">
+        actual_billing_rate3,
+      </if>
+      <if test="cancellationNotes != null">
+        cancellation_notes,
+      </if>
+      <if test="freeChargeFlag != null">
+        free_charge_flag,
+      </if>
+      <if test="roundingMethod != null">
+        rounding_method,
+      </if>
+      <if test="policyDiscountReference != null">
+        policy_discount_reference,
+      </if>
+      <if test="taxInvoicingFlag != null">
+        tax_invoicing_flag,
+      </if>
+      <if test="taxInvoicingTime != null">
+        tax_invoicing_time,
+      </if>
+      <if test="taxpayerFullName != null">
+        taxpayer_full_name,
+      </if>
+      <if test="taxpayerId != null">
+        taxpayer_id,
+      </if>
+      <if test="invoiceCode != null">
+        invoice_code,
+      </if>
+      <if test="invoiceNumber != null">
+        invoice_number,
+      </if>
+      <if test="buyerBank != null">
+        buyer_bank,
+      </if>
+      <if test="totalAmount != null">
+        total_amount,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="paymentStatus != null">
+        payment_status,
+      </if>
+      <if test="transferStatus != null">
+        transfer_status,
+      </if>
+      <if test="dueDate != null">
+        due_date,
+      </if>
+      <if test="discountAmount != null">
+        discount_amount,
+      </if>
+      <if test="lateFee != null">
+        late_fee,
+      </if>
+      <if test="actualReceivedAmount != null">
+        actual_received_amount,
+      </if>
+      <if test="receiptDate != null">
+        receipt_date,
+      </if>
+      <if test="createdAt != null">
+        created_at,
+      </if>
+      <if test="updatedAt != null">
+        updated_at,
+      </if>
+      <if test="transferTarget != null">
+        transfer_target,
+      </if>
+      <if test="transferType != null">
+        transfer_type,
+      </if>
+      <if test="transferBatchNo != null">
+        transfer_batch_no,
+      </if>
+      <if test="transferTime != null">
+        transfer_time,
+      </if>
+      <if test="transferOperatorId != null">
+        transfer_operator_id,
+      </if>
+      <if test="transferNotes != null">
+        transfer_notes,
+      </if>
+      <if test="externalRefNo != null">
+        external_ref_no,
+      </if>
+      <if test="externalResponseCode != null">
+        external_response_code,
+      </if>
+      <if test="externalResponseMsg != null">
+        external_response_msg,
+      </if>
+      <if test="lastTransferAttempt != null">
+        last_transfer_attempt,
+      </if>
+      <if test="transferAttemptCount != null">
+        transfer_attempt_count,
+      </if>
+      <if test="nextRetryTime != null">
+        next_retry_time,
+      </if>
+      <if test="electronicInvoiceStatus != null">
+        electronic_invoice_status,
+      </if>
+      <if test="electronicGeneratedAt != null">
+        electronic_generated_at,
+      </if>
+      <if test="electronicGeneratedBy != null">
+        electronic_generated_by,
+      </if>
+      <if test="electronicSentAt != null">
+        electronic_sent_at,
+      </if>
+      <if test="electronicSentBy != null">
+        electronic_sent_by,
+      </if>
+      <if test="electronicSentTo != null">
+        electronic_sent_to,
+      </if>
+      <if test="checkCode != null">
+        check_code,
+      </if>
+      <if test="invoiceNotes != null">
+        invoice_notes,
+      </if>
+      <if test="downloadCount != null">
+        download_count,
+      </if>
+      <if test="lastDownloadAt != null">
+        last_download_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="voucherCode != null">
+        #{voucherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fiscalYear != null">
+        #{fiscalYear,jdbcType=VARCHAR},
+      </if>
+      <if test="fiscalPeriod != null">
+        #{fiscalPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateId != null">
+        #{certificateId,jdbcType=BIGINT},
+      </if>
+      <if test="voyageId != null">
+        #{voyageId,jdbcType=BIGINT},
+      </if>
+      <if test="vesselId != null">
+        #{vesselId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null">
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="startBerthId != null">
+        #{startBerthId,jdbcType=BIGINT},
+      </if>
+      <if test="endBerthId != null">
+        #{endBerthId,jdbcType=BIGINT},
+      </if>
+      <if test="billingMethod != null">
+        #{billingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCode != null">
+        #{chargeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeType != null">
+        #{chargeType,jdbcType=VARCHAR},
+      </if>
+      <if test="pilotageStartTime != null">
+        #{pilotageStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pilotageEndTime != null">
+        #{pilotageEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="routeType != null">
+        #{routeType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardRate2 != null">
+        #{standardRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="standardRate3 != null">
+        #{standardRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="actualStandardRate2 != null">
+        #{actualStandardRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="actualStandardRate3 != null">
+        #{actualStandardRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="actualBillingRate2 != null">
+        #{actualBillingRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="actualBillingRate3 != null">
+        #{actualBillingRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="cancellationNotes != null">
+        #{cancellationNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="freeChargeFlag != null">
+        #{freeChargeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="roundingMethod != null">
+        #{roundingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="policyDiscountReference != null">
+        #{policyDiscountReference,jdbcType=DECIMAL},
+      </if>
+      <if test="taxInvoicingFlag != null">
+        #{taxInvoicingFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="taxInvoicingTime != null">
+        #{taxInvoicingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxpayerFullName != null">
+        #{taxpayerFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerId != null">
+        #{taxpayerId,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceCode != null">
+        #{invoiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNumber != null">
+        #{invoiceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerBank != null">
+        #{buyerBank,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=OTHER},
+      </if>
+      <if test="paymentStatus != null">
+        #{paymentStatus,jdbcType=OTHER},
+      </if>
+      <if test="transferStatus != null">
+        #{transferStatus,jdbcType=OTHER},
+      </if>
+      <if test="dueDate != null">
+        #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="discountAmount != null">
+        #{discountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFee != null">
+        #{lateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualReceivedAmount != null">
+        #{actualReceivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiptDate != null">
+        #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="createdAt != null">
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferTarget != null">
+        #{transferTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        #{transferType,jdbcType=OTHER},
+      </if>
+      <if test="transferBatchNo != null">
+        #{transferBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transferTime != null">
+        #{transferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferOperatorId != null">
+        #{transferOperatorId,jdbcType=BIGINT},
+      </if>
+      <if test="transferNotes != null">
+        #{transferNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="externalRefNo != null">
+        #{externalRefNo,jdbcType=VARCHAR},
+      </if>
+      <if test="externalResponseCode != null">
+        #{externalResponseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="externalResponseMsg != null">
+        #{externalResponseMsg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lastTransferAttempt != null">
+        #{lastTransferAttempt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferAttemptCount != null">
+        #{transferAttemptCount,jdbcType=INTEGER},
+      </if>
+      <if test="nextRetryTime != null">
+        #{nextRetryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicInvoiceStatus != null">
+        #{electronicInvoiceStatus,jdbcType=OTHER},
+      </if>
+      <if test="electronicGeneratedAt != null">
+        #{electronicGeneratedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicGeneratedBy != null">
+        #{electronicGeneratedBy,jdbcType=BIGINT},
+      </if>
+      <if test="electronicSentAt != null">
+        #{electronicSentAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicSentBy != null">
+        #{electronicSentBy,jdbcType=BIGINT},
+      </if>
+      <if test="electronicSentTo != null">
+        #{electronicSentTo,jdbcType=VARCHAR},
+      </if>
+      <if test="checkCode != null">
+        #{checkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNotes != null">
+        #{invoiceNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="downloadCount != null">
+        #{downloadCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastDownloadAt != null">
+        #{lastDownloadAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="syy.portPilotage.entity.BillingVouchers">
+    <!--@mbg.generated-->
+    update port_pilotage.billing_vouchers
+    <set>
+      <if test="voucherCode != null">
+        voucher_code = #{voucherCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fiscalYear != null">
+        fiscal_year = #{fiscalYear,jdbcType=VARCHAR},
+      </if>
+      <if test="fiscalPeriod != null">
+        fiscal_period = #{fiscalPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateId != null">
+        certificate_id = #{certificateId,jdbcType=BIGINT},
+      </if>
+      <if test="voyageId != null">
+        voyage_id = #{voyageId,jdbcType=BIGINT},
+      </if>
+      <if test="vesselId != null">
+        vessel_id = #{vesselId,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null">
+        agent_id = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="startBerthId != null">
+        start_berth_id = #{startBerthId,jdbcType=BIGINT},
+      </if>
+      <if test="endBerthId != null">
+        end_berth_id = #{endBerthId,jdbcType=BIGINT},
+      </if>
+      <if test="billingMethod != null">
+        billing_method = #{billingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCode != null">
+        charge_code = #{chargeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeType != null">
+        charge_type = #{chargeType,jdbcType=VARCHAR},
+      </if>
+      <if test="pilotageStartTime != null">
+        pilotage_start_time = #{pilotageStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pilotageEndTime != null">
+        pilotage_end_time = #{pilotageEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="routeType != null">
+        route_type = #{routeType,jdbcType=VARCHAR},
+      </if>
+      <if test="standardRate2 != null">
+        standard_rate2 = #{standardRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="standardRate3 != null">
+        standard_rate3 = #{standardRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="actualStandardRate2 != null">
+        actual_standard_rate2 = #{actualStandardRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="actualStandardRate3 != null">
+        actual_standard_rate3 = #{actualStandardRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="actualBillingRate2 != null">
+        actual_billing_rate2 = #{actualBillingRate2,jdbcType=DECIMAL},
+      </if>
+      <if test="actualBillingRate3 != null">
+        actual_billing_rate3 = #{actualBillingRate3,jdbcType=DECIMAL},
+      </if>
+      <if test="cancellationNotes != null">
+        cancellation_notes = #{cancellationNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="freeChargeFlag != null">
+        free_charge_flag = #{freeChargeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="roundingMethod != null">
+        rounding_method = #{roundingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="policyDiscountReference != null">
+        policy_discount_reference = #{policyDiscountReference,jdbcType=DECIMAL},
+      </if>
+      <if test="taxInvoicingFlag != null">
+        tax_invoicing_flag = #{taxInvoicingFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="taxInvoicingTime != null">
+        tax_invoicing_time = #{taxInvoicingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxpayerFullName != null">
+        taxpayer_full_name = #{taxpayerFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="taxpayerId != null">
+        taxpayer_id = #{taxpayerId,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceCode != null">
+        invoice_code = #{invoiceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNumber != null">
+        invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerBank != null">
+        buyer_bank = #{buyerBank,jdbcType=VARCHAR},
+      </if>
+      <if test="totalAmount != null">
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=OTHER},
+      </if>
+      <if test="paymentStatus != null">
+        payment_status = #{paymentStatus,jdbcType=OTHER},
+      </if>
+      <if test="transferStatus != null">
+        transfer_status = #{transferStatus,jdbcType=OTHER},
+      </if>
+      <if test="dueDate != null">
+        due_date = #{dueDate,jdbcType=DATE},
+      </if>
+      <if test="discountAmount != null">
+        discount_amount = #{discountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFee != null">
+        late_fee = #{lateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualReceivedAmount != null">
+        actual_received_amount = #{actualReceivedAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="receiptDate != null">
+        receipt_date = #{receiptDate,jdbcType=DATE},
+      </if>
+      <if test="createdAt != null">
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null">
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferTarget != null">
+        transfer_target = #{transferTarget,jdbcType=VARCHAR},
+      </if>
+      <if test="transferType != null">
+        transfer_type = #{transferType,jdbcType=OTHER},
+      </if>
+      <if test="transferBatchNo != null">
+        transfer_batch_no = #{transferBatchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transferTime != null">
+        transfer_time = #{transferTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferOperatorId != null">
+        transfer_operator_id = #{transferOperatorId,jdbcType=BIGINT},
+      </if>
+      <if test="transferNotes != null">
+        transfer_notes = #{transferNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="externalRefNo != null">
+        external_ref_no = #{externalRefNo,jdbcType=VARCHAR},
+      </if>
+      <if test="externalResponseCode != null">
+        external_response_code = #{externalResponseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="externalResponseMsg != null">
+        external_response_msg = #{externalResponseMsg,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="lastTransferAttempt != null">
+        last_transfer_attempt = #{lastTransferAttempt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="transferAttemptCount != null">
+        transfer_attempt_count = #{transferAttemptCount,jdbcType=INTEGER},
+      </if>
+      <if test="nextRetryTime != null">
+        next_retry_time = #{nextRetryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicInvoiceStatus != null">
+        electronic_invoice_status = #{electronicInvoiceStatus,jdbcType=OTHER},
+      </if>
+      <if test="electronicGeneratedAt != null">
+        electronic_generated_at = #{electronicGeneratedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicGeneratedBy != null">
+        electronic_generated_by = #{electronicGeneratedBy,jdbcType=BIGINT},
+      </if>
+      <if test="electronicSentAt != null">
+        electronic_sent_at = #{electronicSentAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="electronicSentBy != null">
+        electronic_sent_by = #{electronicSentBy,jdbcType=BIGINT},
+      </if>
+      <if test="electronicSentTo != null">
+        electronic_sent_to = #{electronicSentTo,jdbcType=VARCHAR},
+      </if>
+      <if test="checkCode != null">
+        check_code = #{checkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceNotes != null">
+        invoice_notes = #{invoiceNotes,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="downloadCount != null">
+        download_count = #{downloadCount,jdbcType=INTEGER},
+      </if>
+      <if test="lastDownloadAt != null">
+        last_download_at = #{lastDownloadAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="syy.portPilotage.entity.BillingVouchers">
+    <!--@mbg.generated-->
+    update port_pilotage.billing_vouchers
+    set voucher_code = #{voucherCode,jdbcType=VARCHAR},
+      fiscal_year = #{fiscalYear,jdbcType=VARCHAR},
+      fiscal_period = #{fiscalPeriod,jdbcType=VARCHAR},
+      certificate_id = #{certificateId,jdbcType=BIGINT},
+      voyage_id = #{voyageId,jdbcType=BIGINT},
+      vessel_id = #{vesselId,jdbcType=BIGINT},
+      agent_id = #{agentId,jdbcType=BIGINT},
+      start_berth_id = #{startBerthId,jdbcType=BIGINT},
+      end_berth_id = #{endBerthId,jdbcType=BIGINT},
+      billing_method = #{billingMethod,jdbcType=VARCHAR},
+      charge_code = #{chargeCode,jdbcType=VARCHAR},
+      charge_type = #{chargeType,jdbcType=VARCHAR},
+      pilotage_start_time = #{pilotageStartTime,jdbcType=TIMESTAMP},
+      pilotage_end_time = #{pilotageEndTime,jdbcType=TIMESTAMP},
+      route_type = #{routeType,jdbcType=VARCHAR},
+      standard_rate2 = #{standardRate2,jdbcType=DECIMAL},
+      standard_rate3 = #{standardRate3,jdbcType=DECIMAL},
+      actual_standard_rate2 = #{actualStandardRate2,jdbcType=DECIMAL},
+      actual_standard_rate3 = #{actualStandardRate3,jdbcType=DECIMAL},
+      actual_billing_rate2 = #{actualBillingRate2,jdbcType=DECIMAL},
+      actual_billing_rate3 = #{actualBillingRate3,jdbcType=DECIMAL},
+      cancellation_notes = #{cancellationNotes,jdbcType=LONGVARCHAR},
+      free_charge_flag = #{freeChargeFlag,jdbcType=VARCHAR},
+      rounding_method = #{roundingMethod,jdbcType=VARCHAR},
+      policy_discount_reference = #{policyDiscountReference,jdbcType=DECIMAL},
+      tax_invoicing_flag = #{taxInvoicingFlag,jdbcType=VARCHAR},
+      tax_invoicing_time = #{taxInvoicingTime,jdbcType=TIMESTAMP},
+      taxpayer_full_name = #{taxpayerFullName,jdbcType=VARCHAR},
+      taxpayer_id = #{taxpayerId,jdbcType=VARCHAR},
+      invoice_code = #{invoiceCode,jdbcType=VARCHAR},
+      invoice_number = #{invoiceNumber,jdbcType=VARCHAR},
+      buyer_bank = #{buyerBank,jdbcType=VARCHAR},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      audit_status = #{auditStatus,jdbcType=OTHER},
+      payment_status = #{paymentStatus,jdbcType=OTHER},
+      transfer_status = #{transferStatus,jdbcType=OTHER},
+      due_date = #{dueDate,jdbcType=DATE},
+      discount_amount = #{discountAmount,jdbcType=DECIMAL},
+      late_fee = #{lateFee,jdbcType=DECIMAL},
+      actual_received_amount = #{actualReceivedAmount,jdbcType=DECIMAL},
+      receipt_date = #{receiptDate,jdbcType=DATE},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      transfer_target = #{transferTarget,jdbcType=VARCHAR},
+      transfer_type = #{transferType,jdbcType=OTHER},
+      transfer_batch_no = #{transferBatchNo,jdbcType=VARCHAR},
+      transfer_time = #{transferTime,jdbcType=TIMESTAMP},
+      transfer_operator_id = #{transferOperatorId,jdbcType=BIGINT},
+      transfer_notes = #{transferNotes,jdbcType=LONGVARCHAR},
+      external_ref_no = #{externalRefNo,jdbcType=VARCHAR},
+      external_response_code = #{externalResponseCode,jdbcType=VARCHAR},
+      external_response_msg = #{externalResponseMsg,jdbcType=LONGVARCHAR},
+      last_transfer_attempt = #{lastTransferAttempt,jdbcType=TIMESTAMP},
+      transfer_attempt_count = #{transferAttemptCount,jdbcType=INTEGER},
+      next_retry_time = #{nextRetryTime,jdbcType=TIMESTAMP},
+      electronic_invoice_status = #{electronicInvoiceStatus,jdbcType=OTHER},
+      electronic_generated_at = #{electronicGeneratedAt,jdbcType=TIMESTAMP},
+      electronic_generated_by = #{electronicGeneratedBy,jdbcType=BIGINT},
+      electronic_sent_at = #{electronicSentAt,jdbcType=TIMESTAMP},
+      electronic_sent_by = #{electronicSentBy,jdbcType=BIGINT},
+      electronic_sent_to = #{electronicSentTo,jdbcType=VARCHAR},
+      check_code = #{checkCode,jdbcType=VARCHAR},
+      invoice_notes = #{invoiceNotes,jdbcType=LONGVARCHAR},
+      download_count = #{downloadCount,jdbcType=INTEGER},
+      last_download_at = #{lastDownloadAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.billing_vouchers
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="voucher_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.voucherCode,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="fiscal_year = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.fiscalYear,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="fiscal_period = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.fiscalPeriod,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="certificate_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.certificateId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="voyage_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.voyageId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="vessel_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.vesselId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="agent_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.agentId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="start_berth_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.startBerthId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="end_berth_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.endBerthId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="billing_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.billingMethod,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="charge_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.chargeCode,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="charge_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.chargeType,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="pilotage_start_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.pilotageStartTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="pilotage_end_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.pilotageEndTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="route_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.routeType,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="standard_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.standardRate2,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="standard_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.standardRate3,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="actual_standard_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.actualStandardRate2,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="actual_standard_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.actualStandardRate3,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="actual_billing_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.actualBillingRate2,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="actual_billing_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.actualBillingRate3,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="cancellation_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.cancellationNotes,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="free_charge_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.freeChargeFlag,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="rounding_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.roundingMethod,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="policy_discount_reference = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.policyDiscountReference,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="tax_invoicing_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.taxInvoicingFlag,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="tax_invoicing_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.taxInvoicingTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="taxpayer_full_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.taxpayerFullName,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="taxpayer_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.taxpayerId,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="invoice_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceCode,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="invoice_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNumber,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="buyer_bank = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.buyerBank,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="total_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.totalAmount,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="audit_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.auditStatus,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="payment_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.paymentStatus,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferStatus,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="due_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.dueDate,jdbcType=DATE}
+        </foreach>
+      </trim>
+      <trim prefix="discount_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.discountAmount,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="late_fee = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.lateFee,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="actual_received_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.actualReceivedAmount,jdbcType=DECIMAL}
+        </foreach>
+      </trim>
+      <trim prefix="receipt_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.receiptDate,jdbcType=DATE}
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="updated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.updatedAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_target = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferTarget,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferType,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_batch_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferBatchNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_operator_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferOperatorId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferNotes,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="external_ref_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.externalRefNo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="external_response_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.externalResponseCode,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="external_response_msg = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.externalResponseMsg,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="last_transfer_attempt = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.lastTransferAttempt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="transfer_attempt_count = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.transferAttemptCount,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="next_retry_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.nextRetryTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_invoice_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicInvoiceStatus,jdbcType=OTHER}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_generated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicGeneratedAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_generated_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicGeneratedBy,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentBy,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_to = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentTo,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="check_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.checkCode,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="invoice_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNotes,jdbcType=LONGVARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="download_count = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.downloadCount,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="last_download_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.lastDownloadAt,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update port_pilotage.billing_vouchers
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="voucher_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.voucherCode != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.voucherCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="fiscal_year = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.fiscalYear != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.fiscalYear,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="fiscal_period = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.fiscalPeriod != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.fiscalPeriod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="certificate_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.certificateId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.certificateId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="voyage_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.voyageId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.voyageId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="vessel_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.vesselId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.vesselId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="agent_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.agentId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.agentId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="start_berth_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.startBerthId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.startBerthId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="end_berth_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.endBerthId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.endBerthId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="billing_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.billingMethod != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.billingMethod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="charge_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.chargeCode != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.chargeCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="charge_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.chargeType != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.chargeType,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="pilotage_start_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.pilotageStartTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.pilotageStartTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="pilotage_end_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.pilotageEndTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.pilotageEndTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="route_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.routeType != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.routeType,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="standard_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.standardRate2 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.standardRate2,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="standard_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.standardRate3 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.standardRate3,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="actual_standard_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actualStandardRate2 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.actualStandardRate2,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="actual_standard_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actualStandardRate3 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.actualStandardRate3,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="actual_billing_rate2 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actualBillingRate2 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.actualBillingRate2,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="actual_billing_rate3 = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actualBillingRate3 != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.actualBillingRate3,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="cancellation_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.cancellationNotes != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.cancellationNotes,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="free_charge_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.freeChargeFlag != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.freeChargeFlag,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="rounding_method = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.roundingMethod != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.roundingMethod,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="policy_discount_reference = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.policyDiscountReference != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.policyDiscountReference,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="tax_invoicing_flag = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.taxInvoicingFlag != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.taxInvoicingFlag,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="tax_invoicing_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.taxInvoicingTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.taxInvoicingTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="taxpayer_full_name = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.taxpayerFullName != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.taxpayerFullName,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="taxpayer_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.taxpayerId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.taxpayerId,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="invoice_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.invoiceCode != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="invoice_number = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.invoiceNumber != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNumber,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="buyer_bank = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.buyerBank != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.buyerBank,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="total_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.totalAmount != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.totalAmount,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="audit_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.auditStatus != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.auditStatus,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="payment_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.paymentStatus != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.paymentStatus,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferStatus != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferStatus,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="due_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.dueDate != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.dueDate,jdbcType=DATE}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="discount_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.discountAmount != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.discountAmount,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="late_fee = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.lateFee != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.lateFee,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="actual_received_amount = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.actualReceivedAmount != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.actualReceivedAmount,jdbcType=DECIMAL}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="receipt_date = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.receiptDate != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.receiptDate,jdbcType=DATE}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="created_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createdAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.createdAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="updated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updatedAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.updatedAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_target = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferTarget != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferTarget,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_type = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferType != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferType,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_batch_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferBatchNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferBatchNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_operator_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferOperatorId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferOperatorId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferNotes != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferNotes,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="external_ref_no = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.externalRefNo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.externalRefNo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="external_response_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.externalResponseCode != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.externalResponseCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="external_response_msg = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.externalResponseMsg != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.externalResponseMsg,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="last_transfer_attempt = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.lastTransferAttempt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.lastTransferAttempt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="transfer_attempt_count = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.transferAttemptCount != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.transferAttemptCount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="next_retry_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.nextRetryTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.nextRetryTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_invoice_status = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicInvoiceStatus != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicInvoiceStatus,jdbcType=OTHER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_generated_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicGeneratedAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicGeneratedAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_generated_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicGeneratedBy != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicGeneratedBy,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicSentAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_by = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicSentBy != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentBy,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="electronic_sent_to = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.electronicSentTo != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.electronicSentTo,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="check_code = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.checkCode != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.checkCode,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="invoice_notes = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.invoiceNotes != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.invoiceNotes,jdbcType=LONGVARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="download_count = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.downloadCount != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.downloadCount,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="last_download_at = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.lastDownloadAt != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.lastDownloadAt,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into port_pilotage.billing_vouchers
+    (voucher_code, fiscal_year, fiscal_period, certificate_id, voyage_id, vessel_id, 
+      agent_id, start_berth_id, end_berth_id, billing_method, charge_code, charge_type, 
+      pilotage_start_time, pilotage_end_time, route_type, standard_rate2, standard_rate3, 
+      actual_standard_rate2, actual_standard_rate3, actual_billing_rate2, actual_billing_rate3, 
+      cancellation_notes, free_charge_flag, rounding_method, policy_discount_reference, 
+      tax_invoicing_flag, tax_invoicing_time, taxpayer_full_name, taxpayer_id, invoice_code, 
+      invoice_number, buyer_bank, total_amount, audit_status, payment_status, transfer_status, 
+      due_date, discount_amount, late_fee, actual_received_amount, receipt_date, created_at, 
+      updated_at, transfer_target, transfer_type, transfer_batch_no, transfer_time, transfer_operator_id, 
+      transfer_notes, external_ref_no, external_response_code, external_response_msg, 
+      last_transfer_attempt, transfer_attempt_count, next_retry_time, electronic_invoice_status, 
+      electronic_generated_at, electronic_generated_by, electronic_sent_at, electronic_sent_by, 
+      electronic_sent_to, check_code, invoice_notes, download_count, last_download_at
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.voucherCode,jdbcType=VARCHAR}, #{item.fiscalYear,jdbcType=VARCHAR}, #{item.fiscalPeriod,jdbcType=VARCHAR}, 
+        #{item.certificateId,jdbcType=BIGINT}, #{item.voyageId,jdbcType=BIGINT}, #{item.vesselId,jdbcType=BIGINT}, 
+        #{item.agentId,jdbcType=BIGINT}, #{item.startBerthId,jdbcType=BIGINT}, #{item.endBerthId,jdbcType=BIGINT}, 
+        #{item.billingMethod,jdbcType=VARCHAR}, #{item.chargeCode,jdbcType=VARCHAR}, #{item.chargeType,jdbcType=VARCHAR}, 
+        #{item.pilotageStartTime,jdbcType=TIMESTAMP}, #{item.pilotageEndTime,jdbcType=TIMESTAMP}, 
+        #{item.routeType,jdbcType=VARCHAR}, #{item.standardRate2,jdbcType=DECIMAL}, #{item.standardRate3,jdbcType=DECIMAL}, 
+        #{item.actualStandardRate2,jdbcType=DECIMAL}, #{item.actualStandardRate3,jdbcType=DECIMAL}, 
+        #{item.actualBillingRate2,jdbcType=DECIMAL}, #{item.actualBillingRate3,jdbcType=DECIMAL}, 
+        #{item.cancellationNotes,jdbcType=LONGVARCHAR}, #{item.freeChargeFlag,jdbcType=VARCHAR}, 
+        #{item.roundingMethod,jdbcType=VARCHAR}, #{item.policyDiscountReference,jdbcType=DECIMAL}, 
+        #{item.taxInvoicingFlag,jdbcType=VARCHAR}, #{item.taxInvoicingTime,jdbcType=TIMESTAMP}, 
+        #{item.taxpayerFullName,jdbcType=VARCHAR}, #{item.taxpayerId,jdbcType=VARCHAR}, 
+        #{item.invoiceCode,jdbcType=VARCHAR}, #{item.invoiceNumber,jdbcType=VARCHAR}, #{item.buyerBank,jdbcType=VARCHAR}, 
+        #{item.totalAmount,jdbcType=DECIMAL}, #{item.auditStatus,jdbcType=OTHER}, #{item.paymentStatus,jdbcType=OTHER}, 
+        #{item.transferStatus,jdbcType=OTHER}, #{item.dueDate,jdbcType=DATE}, #{item.discountAmount,jdbcType=DECIMAL}, 
+        #{item.lateFee,jdbcType=DECIMAL}, #{item.actualReceivedAmount,jdbcType=DECIMAL}, 
+        #{item.receiptDate,jdbcType=DATE}, #{item.createdAt,jdbcType=TIMESTAMP}, #{item.updatedAt,jdbcType=TIMESTAMP}, 
+        #{item.transferTarget,jdbcType=VARCHAR}, #{item.transferType,jdbcType=OTHER}, #{item.transferBatchNo,jdbcType=VARCHAR}, 
+        #{item.transferTime,jdbcType=TIMESTAMP}, #{item.transferOperatorId,jdbcType=BIGINT}, 
+        #{item.transferNotes,jdbcType=LONGVARCHAR}, #{item.externalRefNo,jdbcType=VARCHAR}, 
+        #{item.externalResponseCode,jdbcType=VARCHAR}, #{item.externalResponseMsg,jdbcType=LONGVARCHAR}, 
+        #{item.lastTransferAttempt,jdbcType=TIMESTAMP}, #{item.transferAttemptCount,jdbcType=INTEGER}, 
+        #{item.nextRetryTime,jdbcType=TIMESTAMP}, #{item.electronicInvoiceStatus,jdbcType=OTHER}, 
+        #{item.electronicGeneratedAt,jdbcType=TIMESTAMP}, #{item.electronicGeneratedBy,jdbcType=BIGINT}, 
+        #{item.electronicSentAt,jdbcType=TIMESTAMP}, #{item.electronicSentBy,jdbcType=BIGINT}, 
+        #{item.electronicSentTo,jdbcType=VARCHAR}, #{item.checkCode,jdbcType=VARCHAR}, 
+        #{item.invoiceNotes,jdbcType=LONGVARCHAR}, #{item.downloadCount,jdbcType=INTEGER}, 
+        #{item.lastDownloadAt,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  <delete id="deleteByPrimaryKeyIn">
+    <!--@mbg.generated-->
+    delete from port_pilotage.billing_vouchers where id in 
+    <foreach close=")" collection="list" item="id" open="(" separator=", ">
+      #{id,jdbcType=BIGINT}
+    </foreach>
+  </delete>
+
+
+    
+    <!-- 按收费类型统计费用 -->
+    <select id="getFeeBreakdownByType" resultType="map">
+        SELECT 
+            COALESCE(charge_type, 'PILOTAGE') as chargeType,
+            SUM(total_amount) as totalAmount
+        FROM billing_vouchers
+        WHERE total_amount IS NOT NULL
+        GROUP BY COALESCE(charge_type, 'PILOTAGE')
+    </select>
+    
+    <!-- 按月份统计费用趋势 -->
+    <select id="getFeeTrendByMonth" resultType="map">
+        SELECT 
+            DATE_FORMAT(created_at, '%Y-%m-%d') as month,
+            SUM(total_amount) as totalAmount
+        FROM billing_vouchers
+        WHERE total_amount IS NOT NULL
+          AND created_at &gt;= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m-%d')
+        ORDER BY DATE_FORMAT(created_at, '%Y-%m-%d')
+    </select>
+
+    <!-- 获取当前期间总金额 -->
+    <select id="getCurrentPeriodTotal" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(total_amount), 0)
+        FROM billing_vouchers
+        WHERE total_amount IS NOT NULL
+          AND created_at &gt;= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+          AND created_at &lt;= NOW()
+    </select>
+
+    <!-- 获取上一期间总金额 -->
+    <select id="getPreviousPeriodTotal" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(total_amount), 0)
+        FROM billing_vouchers
+        WHERE total_amount IS NOT NULL
+          AND created_at &gt;= DATE_SUB(DATE_SUB(NOW(), INTERVAL 1 MONTH), INTERVAL 1 MONTH)
+          AND created_at &lt; DATE_SUB(NOW(), INTERVAL 1 MONTH)
+    </select>
+
+    <!-- 按类别统计费用 -->
+    <select id="getCategoryStats" resultType="map">
+        SELECT
+            COALESCE(charge_type, 'PILOTAGE') as name,
+            SUM(total_amount) as value
+        FROM billing_vouchers
+        WHERE total_amount IS NOT NULL
+        GROUP BY COALESCE(charge_type, 'PILOTAGE')
+    </select>
+</mapper>

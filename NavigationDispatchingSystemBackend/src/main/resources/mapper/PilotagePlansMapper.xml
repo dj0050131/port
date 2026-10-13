@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="syy.portPilotage.mapper.PilotagePlansMapper">
+
+    <resultMap id="BaseResultMap" type="syy.portPilotage.entity.PilotagePlans">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+
+            <result property="planCode" column="plan_code" jdbcType="VARCHAR"/>
+            <result property="planStartTime" column="plan_start_time" jdbcType="TIMESTAMP"/>
+            <result property="planEndTime" column="plan_end_time" jdbcType="TIMESTAMP"/>
+            <result property="assignedPilotId" column="assigned_pilot_id" jdbcType="BIGINT"/>
+            <result property="assignedDriverId" column="assigned_driver_id" jdbcType="BIGINT"/>
+            <result property="boardingTime" column="boarding_time" jdbcType="TIMESTAMP"/>
+            <result property="leavingTime" column="leaving_time" jdbcType="TIMESTAMP"/>
+            <result property="actualStartTime" column="actual_start_time" jdbcType="TIMESTAMP"/>
+            <result property="actualEndTime" column="actual_end_time" jdbcType="TIMESTAMP"/>
+            <result property="operationTypeFlag" column="operation_type_flag" jdbcType="VARCHAR"/>
+            <result property="vesselScheduleStatus" column="vessel_schedule_status" jdbcType="VARCHAR"/>
+            <result property="berthingPlanStatus" column="berthing_plan_status" jdbcType="VARCHAR"/>
+            <result property="pilotagePlanStatus" column="pilotage_plan_status" jdbcType="VARCHAR"/>
+            <result property="tableCategoryFlag" column="table_category_flag" jdbcType="VARCHAR"/>
+            <result property="planStatus" column="plan_status" jdbcType="OTHER"/>
+            <result property="cancelReason" column="cancel_reason" jdbcType="VARCHAR"/>
+            <result property="createdBy" column="created_by" jdbcType="BIGINT"/>
+            <result property="publishedAt" column="published_at" jdbcType="TIMESTAMP"/>
+            <result property="actualCompletionTime" column="actual_completion_time" jdbcType="TIMESTAMP"/>
+            <result property="delayReason" column="delay_reason" jdbcType="VARCHAR"/>
+            <result property="weatherImpact" column="weather_impact" jdbcType="VARCHAR"/>
+            <result property="assignedVehicleId" column="assigned_vehicle_id" jdbcType="BIGINT"/>
+            <result property="startLocationName" column="start_location_name" jdbcType="VARCHAR"/>
+            <result property="endLocationName" column="end_location_name" jdbcType="VARCHAR"/>
+            <result property="startLocationId" column="start_location_id" jdbcType="BIGINT"/>
+            <result property="startLocationType" column="start_location_type" jdbcType="OTHER"/>
+            <result property="endLocationId" column="end_location_id" jdbcType="BIGINT"/>
+            <result property="endLocationType" column="end_location_type" jdbcType="OTHER"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,plan_code,plan_start_time,
+        plan_end_time,start_location,end_location,assigned_pilot_id,
+        assigned_driver_id,boarding_time,leaving_time,
+        actual_start_time,actual_end_time,operation_type_flag,
+        vessel_schedule_status,berthing_plan_status,pilotage_plan_status,
+        table_category_flag,plan_status,cancel_reason,
+        created_by,published_at,actual_completion_time,
+        start_location_name,end_location_name,start_location_id,
+        start_location_type,end_location_id,end_location_type,
+        delay_reason,weather_impact, assigned_vehicle_id,created_at,
+        updated_at
+    </sql>
+</mapper>
